@@ -7,6 +7,7 @@ import { User } from './Entities/users';
 import { Conditions } from './Entities/conditions';
 import { Categories } from './Entities/categories';
 import { Task } from './Entities/tasks';
+import { miscService, TaskService, UserService } from './Providers/psql.provider';
 
 @Module({
   imports: [
@@ -29,6 +30,11 @@ import { Task } from './Entities/tasks';
 
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService, 
+    //miscService,
+    //TaskService,
+    //UserService
+  ],
 })
 export class AppModule {}
