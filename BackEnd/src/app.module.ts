@@ -6,8 +6,12 @@ import { AppService } from './app.service';
 import { User } from './Entities/users';
 import { Conditions } from './Entities/conditions';
 import { Categories } from './Entities/categories';
-import { Task } from './Entities/tasks';
+import { Task, taskView } from './Entities/tasks';
+
 import { miscService, TaskService, UserService } from './Providers/psql.provider';
+import { MiscController } from './Controllers/misc/misc.controller';
+import { TaskController } from './Controllers/task/task.controller';
+import { UserController } from './Controllers/user/user.controller';
 
 @Module({
   imports: [
@@ -21,20 +25,32 @@ import { miscService, TaskService, UserService } from './Providers/psql.provider
         User,
         Task,
         Conditions,
-        Categories
+        Categories,
+        taskView
         ],
       database: 'tododb',
       synchronize: true,
       logging: true,
-    })
-
+    }),
+    TypeOrmModule.forFeature([
+      User,
+      Conditions,
+      Categories,
+      Task,
+      taskView
+    ]),
   ],
-  controllers: [AppController],
+  controllers: [
+    AppController,
+    MiscController,
+    TaskController,
+    UserController,
+  ],
   providers: [
     AppService, 
-    //miscService,
-    //TaskService,
-    //UserService
+    miscService,
+    TaskService,
+    UserService,
   ],
 })
 export class AppModule {}

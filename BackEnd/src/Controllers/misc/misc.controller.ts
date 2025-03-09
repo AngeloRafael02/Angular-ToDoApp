@@ -1,11 +1,10 @@
-
 import { Controller, Get } from '@nestjs/common';
 import { Categories } from 'src/Entities/categories';
 import { Conditions } from 'src/Entities/conditions';
 import { miscService } from 'src/Providers/psql.provider';
 
 @Controller('misc')
-export class CatsController {
+export class MiscController {
     constructor(
         private miscService:miscService
     ){}
