@@ -4,7 +4,11 @@ import {
     PrimaryGeneratedColumn, 
     CreateDateColumn,
     UpdateDateColumn,
-    ManyToOne
+    ManyToOne,
+    ViewEntity,
+    PrimaryColumn,
+    ViewColumn,
+    DataSource
 } from "typeorm";
 import { Categories } from "./categories";
 import { Conditions } from "./conditions";
@@ -26,7 +30,7 @@ export class Task{
     category: Categories;
 
     @Column({type:'int', default:0})
-    prop:number
+    prio:number
     
     @ManyToOne(() => Conditions, (conditions) => conditions.id) // Define foreign key relationship
     @Column("smallint", { name: "stat_id", default: 1, nullable:false })
@@ -43,3 +47,57 @@ export class Task{
     @Column({ type: 'int', nullable: false, name: "owner_id" }) // Keep the owner_id in database
     owner: User;
 };
+
+@ViewEntity({
+    expression: (dataSource:DataSource) => dataSource
+    .createQueryBuilder()
+    .select("t.id","ID")
+    .addSelect("t.title", "Title")
+    .addSelect("t.note", "Description")
+    .addSelect("t.cat_id", "CID")
+    .addSelect("cat.cat","Category")
+    .addSelect("t.prio","Priority")
+    .addSelect("t.stat_id","SID")
+    .addSelect("con.stat","Status")
+    .addSelect("t.created_at", "Created At")
+    .addSelect("t.last_edited", "Last Edited")
+    .addSelect("u.id","UID")
+    .from(Task, "t")
+    .innerJoin(Categories, "cat", "t.cat_id = cat.id")
+    .innerJoin(Conditions, "con", "t.stat_id = con.id")
+    .innerJoin(User, "u", "t.owner_id = u.id")
+})
+export class taskView {
+    @PrimaryColumn({name:'ID'})
+    ID:number
+
+    @ViewColumn({name:'Title'})
+    Title:string
+
+    @ViewColumn({name:'Description'})
+    Description:string
+
+    @ViewColumn({name:'CID'})
+    CID:number
+
+    @ViewColumn({name:'Category'})
+    Category:string
+
+    @ViewColumn({name:'Priority'})
+    Priority:number
+
+    @ViewColumn({name:'SID'})
+    SID:number
+
+    @ViewColumn({name:'Status'})
+    Status:string
+
+    @ViewColumn({name:'Created At'})
+    "Created At":Date
+
+    @ViewColumn({name:'Last Edited'})
+    "Last Edited":Date
+
+    @ViewColumn({name:'UID'})
+    UID:number
+}
