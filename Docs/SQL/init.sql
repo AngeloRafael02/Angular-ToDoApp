@@ -18,10 +18,13 @@ VALUES
 ('Unfinished'),
 ('In Progress'),
 ('Finished'),
-('Cancelled');
+('Cancelled'),
+('Delayed'),
+('Continuous'),
+('Speculation');
 
 
-CREATE TABLE categories(
+CREATE INTO categories(
     id SERIAL PRIMARY KEY,
     cat VARCHAR(20) NOT NULL
 );
@@ -34,7 +37,8 @@ VALUES
 ('Career'),
 ('Automotive'),
 ('IT'),
-('Government')
+('Government'),
+('Fitness')
 ;
 
 CREATE TABLE tasks(
