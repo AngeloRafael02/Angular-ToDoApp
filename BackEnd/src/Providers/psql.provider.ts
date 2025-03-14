@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import { Task } from "src/Entities/tasks";
+import { Task,taskView } from "src/Entities/tasks";
 import { Categories } from "src/Entities/categories";
 import { User } from "src/Entities/users";
 import { Conditions } from "src/Entities/conditions";
@@ -17,48 +17,46 @@ export class miscService{
         private CondRepository: Repository<Conditions>,
     ) {}
 
-    async findAllCat(): Promise<Categories[]> {
-        return this.CatRepository.find();
+    public async findAllCat(): Promise<Categories[]> {
+        return await this.CatRepository.find();
     }
 
-    async findAllCond(): Promise<Conditions[]> {
-        return this.CondRepository.find();
+    public async findAllCond(): Promise<Conditions[]> {
+        return await this.CondRepository.find();
     }
 }
 
 @Injectable()
-export class TaskService{
-    constructor(@InjectRepository(Task)
-    private taskRepository: Repository<Task>
+export class taskViewService{
+    constructor(
+        @InjectRepository(taskView)
+        private taskViewRep:Repository<taskView>,
+
+        @InjectRepository(Task)
+        private taskRepository: Repository<Task>
     ){}
 
-    async findAll(): Promise<Task[]> {
-        return this.taskRepository.find();
+    public async getAllfromID(id:number):Promise<taskView[]>{
+        return await this.taskViewRep.findBy({ID:id})
     }
 
-    async findOne(id:number): Promise<Task> {
-        const user = await this.taskRepository.findOne({ where: { id } });
-        if (!user) {
-            throw new NotFoundException(`User with ID ${id} not found`);
-        }
-        return user;
-    }
-
-    async create(userData: Partial<Task>): Promise<Task> {
-        const newUser = this.taskRepository.create(userData);
-        return this.taskRepository.save(newUser);
-    }
-
-    async update(id: number, userData: Partial<Task>): Promise<Task> {
-        const user = await this.findOne(id); // Reuse findOne to check existence
-        // Important: Avoid overwriting the ID
-        delete userData.id;  // or if (userData.hasOwnProperty('id')) delete userData.id;
-        Object.assign(user, userData); // Merge the updated data
-        return this.taskRepository.save(user);
+    public async getOneFromID(id:number):Promise<taskView> {
+        return await this.taskViewRep.findOneOrFail({where:{ID:id}})
     }
     
-    async remove(id: number): Promise<void> {
-        const user = await this.findOne(id); // Reuse findOne to check existence
+    public async createOne(userData: Partial<Task>):Promise<Task>{
+        const newUser = this.taskRepository.create(userData);
+        return await this.taskRepository.save(newUser);
+    }
+
+    public async update(id: number, updatedTask: Partial<Omit<Task, 'id'>>):Promise<Partial<Omit<Task, "id">> & Task>{
+        const user = await this.taskRepository.findOneByOrFail({id:id})
+        Object.assign(user,updatedTask)
+        return this.taskRepository.save(updatedTask)
+    }
+    
+    public async remove(id: number): Promise<void> {
+        const user = await this.taskRepository.findOneByOrFail({id:id})// Reuse findOne to check existence
         await this.taskRepository.remove(user);
     }
 }
@@ -70,11 +68,11 @@ export class UserService{
         private UserRepository: Repository<User>
     ){}
 
-    async findAll(): Promise<User[]> {
+    public async findAll(): Promise<User[]> {
         return this.UserRepository.find();
     }
 
-    async findOne(id: number): Promise<User> {
+    public async findOne(id: number): Promise<User> {
         const user = await this.UserRepository.findOne({ where: { id } });
         if (!user) {
             throw new NotFoundException(`User with ID ${id} not found`);
@@ -82,12 +80,12 @@ export class UserService{
         return user;
     }
 
-    async create(userData: Partial<User>): Promise<User> {
+    public async create(userData: Partial<User>): Promise<User> {
         const newUser = this.UserRepository.create(userData);
         return this.UserRepository.save(newUser);
     }
     
-    async update(id: number, userData: Partial<User>): Promise<User> {
+    public async update(id: number, userData: Partial<User>): Promise<User> {
         const user = await this.findOne(id); // Reuse findOne to check existence
         // Important: Avoid overwriting the ID
         delete userData.id;  // or if (userData.hasOwnProperty('id')) delete userData.id;
@@ -95,7 +93,7 @@ export class UserService{
         return this.UserRepository.save(user);
     }
     
-    async remove(id: number): Promise<void> {
+    public async remove(id: number): Promise<void> {
         const user = await this.findOne(id); // Reuse findOne to check existence
         await this.UserRepository.remove(user);
     }

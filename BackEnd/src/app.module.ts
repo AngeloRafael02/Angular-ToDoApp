@@ -22,22 +22,22 @@ import { UserController } from './Controllers/user/user.controller';
     }),
     TypeOrmModule.forRootAsync({
       useFactory: async (configService: ConfigService) => ({
-      type: 'postgres',
+        type: 'postgres',
         host: configService.get<string>('HOST'),
         port: configService.get<number>('PORT'),
         password: configService.get<string>('PASSWORD'),
         username: configService.get<string>('USERNAME'),
-      entities: [
-        User,
-        Task,
-        Conditions,
-        Categories,
-        taskView
-        ],
-      database: 'tododb',
-      synchronize: true,
-      logging: true,
-    }),
+        entities: [
+          User,
+          Task,
+          Conditions,
+          Categories,
+          taskView
+          ],
+        database: 'tododb',
+        synchronize: true,
+        logging: true,
+      }),
       inject: [ConfigService]
     }),
     TypeOrmModule.forFeature([
@@ -57,7 +57,7 @@ import { UserController } from './Controllers/user/user.controller';
   providers: [
     AppService, 
     miscService,
-    TaskService,
+    taskViewService,
     UserService,
   ],
 })
