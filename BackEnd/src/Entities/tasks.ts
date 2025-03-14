@@ -42,7 +42,9 @@ export class Task{
     @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP',nullable:false  })
     last_edited:Date
 
-    
+    @Column({type:'time without time zone', nullable:true})
+    deadline:Date
+
     @ManyToOne(() => User, (user) => user.id) // Define foreign key relationship
     @Column({ type: 'int', nullable: false, name: "owner_id" }) // Keep the owner_id in database
     owner: User;
@@ -61,6 +63,7 @@ export class Task{
     .addSelect("con.stat","Status")
     .addSelect("t.created_at", "Created At")
     .addSelect("t.last_edited", "Last Edited")
+    .addSelect("t.deadline", "Deadline")
     .addSelect("u.id","UID")
     .from(Task, "t")
     .innerJoin(Categories, "cat", "t.cat_id = cat.id")
@@ -97,6 +100,9 @@ export class taskView {
 
     @ViewColumn({name:'Last Edited'})
     "Last Edited":Date
+
+    @ViewColumn({name:'Deadline'})
+    Deadline:Date
 
     @ViewColumn({name:'UID'})
     UID:number
