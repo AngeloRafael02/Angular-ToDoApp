@@ -1,24 +1,24 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
-import { TaskService } from 'src/Providers/psql.provider';
-import { Task } from 'src/Entities/tasks';
+import { taskViewService} from 'src/Providers/psql.provider';
+import { Task, taskView } from 'src/Entities/tasks';
 
 @Controller('task')
 export class TaskController {
-    constructor(private readonly TaskService: TaskService) {} // Inject the TaskService
+    constructor(private readonly TaskService: taskViewService) {}
 
-    @Get()
-    findAll(): Promise<Task[]> {
-      return this.TaskService.findAll();
+    @Get(':idAll')
+    findAll(@Param('idAll', ParseIntPipe) id: number):Promise<taskView[]>{
+      return this.TaskService.getAllfromID(id);
     }
   
-    @Get(':id')
-    findOne(@Param('id', ParseIntPipe) id: number): Promise<Task> {
-      return this.TaskService.findOne(id);
+    @Get(':idOne')
+    findOne(@Param('idOne', ParseIntPipe) id: number): Promise<taskView> {
+      return this.TaskService.getOneFromID(id);
     }
   
     @Post()
     create(@Body() userData: Partial<Task>): Promise<Task> {
-      return this.TaskService.create(userData);
+      return this.TaskService.createOne(userData)
     }
   
     @Put(':id')
