@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 import { Task,taskView } from "src/Entities/tasks";
 import { Categories } from "src/Entities/categories";
@@ -15,6 +15,9 @@ export class miscService{
         
         @InjectRepository(Conditions)
         private CondRepository: Repository<Conditions>,
+
+        @InjectRepository(Task)
+        private TaskRepositoy:Repository<Task>
     ) {}
 
     public async findAllCat(): Promise<Categories[]> {
@@ -24,6 +27,29 @@ export class miscService{
     public async findAllCond(): Promise<Conditions[]> {
         return await this.CondRepository.find();
     }
+
+    async getColumnNames(tableName: string): Promise<string[]> {
+        const queryBuilder = this.TaskRepositoy.createQueryBuilder();
+        const rawData = await queryBuilder.connection.query(`
+          SELECT column_name
+          FROM information_schema.columns
+          WHERE table_name = '${tableName}'
+          ORDER BY 
+            CASE column_name
+                WHEN 'ID' THEN 1
+                WHEN 'Title' THEN 2
+                WHEN 'Description' THEN 3
+                WHEN 'Category' THEN 4
+                WHEN 'Priority' THEN 5
+                WHEN 'Status' THEN 6
+                WHEN 'Deadline' THEN 7
+                WHEN 'Created At' THEN 8
+                WHEN 'Last Edited' THEN 9
+                ELSE 10 -- For any other columns
+            END
+        `);
+        return rawData.map((row) => row.column_name);
+      }
 }
 
 @Injectable()

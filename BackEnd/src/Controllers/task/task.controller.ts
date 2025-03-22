@@ -6,7 +6,7 @@ import { Task, taskView } from 'src/Entities/tasks';
 export class TaskController {
     constructor(private readonly TaskService: taskViewService) {}
 
-    @Get(':idAll')
+    @Get('all/:idAll')
     findAll(@Param('idAll', ParseIntPipe) id: number):Promise<taskView[]>{
       return this.TaskService.getAllfromID(id);
     }
