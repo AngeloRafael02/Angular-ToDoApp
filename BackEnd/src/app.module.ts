@@ -16,17 +16,13 @@ import { UserController } from './Controllers/user/user.controller';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath:'.env'
-    }),
-    TypeOrmModule.forRootAsync({
-      useFactory: async (configService: ConfigService) => ({
+    TypeOrmModule.forRoot({
         type: 'postgres',
-        host: configService.get<string>('HOST'),
-        port: configService.get<number>('PORT'),
-        password: configService.get<string>('PASSWORD'),
-        username: configService.get<string>('USERNAME'),
+        host: '192.168.1.70',
+        port: 5432,
+        password: '820824',
+        username: 'angelorafael',
+        database: 'tododb',
         entities: [
           User,
           Task,
@@ -34,11 +30,9 @@ import { UserController } from './Controllers/user/user.controller';
           Categories,
           taskView
           ],
-        database: 'tododb',
-        synchronize: true,
+        //synchronize: true,
         logging: true,
-      }),
-      inject: [ConfigService]
+        //autoLoadEntities: true,
     }),
     TypeOrmModule.forFeature([
       User,
@@ -61,4 +55,5 @@ import { UserController } from './Controllers/user/user.controller';
     UserService,
   ],
 })
-export class AppModule {}
+export class AppModule {
+}
