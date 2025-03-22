@@ -22,7 +22,7 @@ export class Task{
     @Column({type:'varchar',length:50, nullable:false})
     title:string
 
-    @Column({type:'varchar', length:255, nullable:false})
+    @Column({type:'varchar', length:255, nullable:true})
     note:string
 
     @ManyToOne(() => Categories, (category) => category.id) 
@@ -36,10 +36,10 @@ export class Task{
     @Column("smallint", { name: "stat_id", default: 1, nullable:false })
     conditions:Conditions
 
-    @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP',nullable:false })
+    @CreateDateColumn({ type: 'time without time zone', default: () => 'CURRENT_TIMESTAMP',nullable:false })
     created_at:Date
 
-    @UpdateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP',nullable:false  })
+    @UpdateDateColumn({ type: 'time without time zone', default: () => 'CURRENT_TIMESTAMP',nullable:false  })
     last_edited:Date
 
     @Column({type:'time without time zone', nullable:true})
@@ -56,14 +56,14 @@ export class Task{
     .select("t.id","ID")
     .addSelect("t.title", "Title")
     .addSelect("t.note", "Description")
-    .addSelect("t.cat_id", "CID")
     .addSelect("cat.cat","Category")
     .addSelect("t.prio","Priority")
-    .addSelect("t.stat_id","SID")
     .addSelect("con.stat","Status")
+    .addSelect("t.deadline", "Deadline")
     .addSelect("t.created_at", "Created At")
     .addSelect("t.last_edited", "Last Edited")
-    .addSelect("t.deadline", "Deadline")
+    .addSelect("t.stat_id","SID")
+    .addSelect("t.cat_id", "CID")
     .addSelect("u.id","UID")
     .from(Task, "t")
     .innerJoin(Categories, "cat", "t.cat_id = cat.id")
@@ -80,20 +80,17 @@ export class taskView {
     @ViewColumn({name:'Description'})
     Description:string
 
-    @ViewColumn({name:'CID'})
-    CID:number
-
     @ViewColumn({name:'Category'})
     Category:string
 
     @ViewColumn({name:'Priority'})
     Priority:number
 
-    @ViewColumn({name:'SID'})
-    SID:number
-
     @ViewColumn({name:'Status'})
     Status:string
+
+    @ViewColumn({name:'Deadline'})
+    Deadline:Date
 
     @ViewColumn({name:'Created At'})
     "Created At":Date
@@ -101,8 +98,11 @@ export class taskView {
     @ViewColumn({name:'Last Edited'})
     "Last Edited":Date
 
-    @ViewColumn({name:'Deadline'})
-    Deadline:Date
+    @ViewColumn({name:'SID'})
+    SID:number
+
+    @ViewColumn({name:'CID'})
+    CID:number
 
     @ViewColumn({name:'UID'})
     UID:number
