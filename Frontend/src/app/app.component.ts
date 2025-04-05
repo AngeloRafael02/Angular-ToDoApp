@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ToDoListComponent } from './templates/to-do-list/to-do-list.component';
+import { ToDoListComponent } from './components/to-do-list/to-do-list.component';
 import { RouterOutlet } from '@angular/router';
-import { ToDoFormComponent } from './templates/to-do-form/to-do-form.component';
+import { ToDoFormComponent } from './components/to-do-form/to-do-form.component';
 import { MatDialog,MatDialogRef } from "@angular/material/dialog";
 
 @Component({
