@@ -1,19 +1,21 @@
 import { Component,Inject,OnInit } from '@angular/core';
 import { PostgresService } from '../../services/postgres.service';
-import { categoriesInterface, conditionInterface } from '../../interfaces';
+import { categoriesInterface, conditionInterface, dialogDataInterface, taskInterface } from '../../interfaces';
 import { ReactiveFormsModule, FormBuilder,Validators} from "@angular/forms";
 import { CommonModule } from '@angular/common';
 import { MatDialogRef,MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-to-do-form',
   providers:[PostgresService],
   imports: [
+    MatButtonModule,
     ReactiveFormsModule, 
     CommonModule,
   ],
   template:`
-  <div style="width:500px">
+  <div id="formBox">
     <h2 mat-dialog-title>Task</h2>
     <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
       <div mat-dialog-content>
@@ -40,15 +42,17 @@ import { MatDialogRef,MAT_DIALOG_DATA } from '@angular/material/dialog';
         <input type="date" id="deadline" formControlName="deadline"> 
         <br><br>
       </div>
-      <div mat-dialog-actions align="left">
-            <button type="submit">Submit</button>
-            <button (click)="closeDialog()">Close</button>
+      <div mat-dialog-actions  align="left">
+            <button mat-flat-button class="modalBTN" type="submit">Submit</button>&#9; 
+            <button mat-flat-button class="modalBTN" (click)="closeDialog()">Close</button>
       </div>
     </form>
   </div>
   `,
   styles:`
     #note{ resize:none; }
+    #formBox{ width:500px; padding:1%; }
+    .modalBTN{margin-left:1%; margin-bottom:1%;}
   `
 })
 export class ToDoFormComponent implements OnInit{
@@ -65,47 +69,52 @@ export class ToDoFormComponent implements OnInit{
     private fb: FormBuilder,
     private psql:PostgresService,
 
-    @Inject(MAT_DIALOG_DATA) option: string,
-    @Inject(MAT_DIALOG_DATA) ID: number,
+    @Inject(MAT_DIALOG_DATA) public data:dialogDataInterface,
   ){
-    this.mode = option;
-    this.taskID = ID;
+    this.mode = data.option;
+    this.taskID = data.ID;
   }
 
   ngOnInit(): void {
     this.psql.getAllCategories().subscribe(data => this.taskCategories = data);
     this.psql.getAllConditions().subscribe(data => this.taskConditions = data);
-    if (this.mode == 'new'){
-      this.taskForm = this.fb.group({ 
-        "title":["", [Validators.required, Validators.maxLength(50)]],
-        "note":["",Validators.maxLength(255)],
-        "cat_id":[1,Validators.required],
-        "prio":[null, Validators.min(0)],
-        "stat_id":[1, Validators.required],
-        "created_at":[new Date(),Validators.required],
-        "last_edited":[new Date(),Validators.required],
-        "deadline":[new Date()],
-        "owner_id":[1,Validators.required]
-      });
-    } else {
-      this.taskForm = this.fb.group({ 
-        "title":["", [Validators.required, Validators.maxLength(50)]],
-        "note":["",Validators.maxLength(255)],
-        "cat_id":[1,Validators.required],
-        "prio":[null, Validators.min(0)],
-        "stat_id":[1, Validators.required],
-        "created_at":[new Date(),Validators.required],
-        "last_edited":[new Date(),Validators.required],
-        "deadline":[new Date()],
-        "owner_id":[1,Validators.required]
+    this.taskForm = this.fb.group({ 
+      "title":["", [Validators.required, Validators.maxLength(50)]],
+      "note":["",Validators.maxLength(255)],
+      "cat_id":[1,Validators.required],
+      "prio":[null, Validators.min(0)],
+      "stat_id":[2, Validators.required],
+      "created_at":[new Date().toISOString(),Validators.required],
+      "last_edited":[new Date().toISOString(),Validators.required],
+      "deadline":[new Date()],
+      "owner_id":[1,Validators.required]
+    });
+    if (this.mode == 'update'){
+      this.psql.getOneTaskByID(this.taskID).subscribe(data => {
+        this.taskForm.setValue({
+          title:data.Title,
+          note:data.Description,
+          cat_id:data.CID,
+          prio:data.Priority,
+          stat_id:data.SID,
+          created_at:data["Created At"],
+          last_edited:data["Last Edited"],
+          deadline:data.Deadline,
+          owner_id:data.UID
+        });
       });
     }
   }
 
   onSubmit():void {
     if (this.taskForm.valid) {
-      console.log(this.taskForm.value);
-      // Here you can handle the form submission, e.g., send data to an API
+      if (this.mode == 'new'){
+        alert("??d")
+        this.psql.addTask(this.taskForm.value);
+      } else { //mode = update
+        alert("not new");
+        //this.psql.updateOneTask(this.taskForm.value, this.taskID);
+      }
     } else {
       console.log("Form is invalid");
     }

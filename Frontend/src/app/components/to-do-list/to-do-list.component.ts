@@ -76,7 +76,8 @@ export class ToDoListComponent implements OnInit {
   }
 
   public deleteTask(ID:number){
-
+    this.psql.deleteOneTask(ID);
+    window.location.reload();
   }
 
 }
