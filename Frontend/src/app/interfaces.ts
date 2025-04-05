@@ -1,3 +1,7 @@
+export interface dialogDataInterface{
+    option:string,
+    ID:number
+}
 export interface conditionInterface {
     id:number
     stat:string
@@ -14,7 +18,7 @@ export interface taskInterface {
     Priority?:number
     SID:number
     "Created At":Date | string
-    'Last Edited':Date | string
+    "Last Edited":Date | string
     Deadline?:Date | null
     UID:number
 }
