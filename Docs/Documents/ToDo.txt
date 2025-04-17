@@ -2,4 +2,10 @@ BackEnd
 > add new controllers to app.module - DONE
 FrontEnd
 > Design To Do List - first
+
 > Design To Do Form - second
+    if new Task -> disable status option, Unfinished by Default
+    
+
+ERRORS:
+  TypeError: Cannot create property 'id' on number '1' - SQL works, API does not, 
