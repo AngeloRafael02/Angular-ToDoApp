@@ -12,7 +12,7 @@ export class User {
   middleName: string;
 
   @Column({ type: 'varchar', length: 20, nullable: false })
-  lastName: string;1
+  lastName: string;
 
   @Column({ type: 'varchar', length: 100, nullable: false, unique: true }) // Add unique constraint for email
   email: string;
