@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { Categories } from 'src/Entities/categories';
 import { Conditions } from 'src/Entities/conditions';
-import { miscService } from 'src/Providers/psql.provider';
+import { miscService } from 'src/Providers/misc.provider';
 
 @Controller('misc')
 export class MiscController {

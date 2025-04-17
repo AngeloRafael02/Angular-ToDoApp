@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
-import { taskViewService} from 'src/Providers/psql.provider';
+import { taskViewService } from 'src/Providers/task.provider';
 import { Task, taskView } from 'src/Entities/tasks';
 
 @Controller('task')
@@ -8,7 +8,7 @@ export class TaskController {
 
     @Get('all/:idAll')
     findAll(@Param('idAll', ParseIntPipe) id: number):Promise<taskView[]>{
-      return this.TaskService.getAllfromID(id);
+      return this.TaskService.getAllfromUID(id);
     }
   
     @Get(':idOne')
@@ -17,8 +17,8 @@ export class TaskController {
     }
   
     @Post()
-    create(@Body() userData: Partial<Task>): Promise<Task> {
-      return this.TaskService.createOne(userData)
+    create(@Body() taskData: Task): Promise<Task> {
+      return this.TaskService.createOne(taskData)
     }
   
     @Put(':id')

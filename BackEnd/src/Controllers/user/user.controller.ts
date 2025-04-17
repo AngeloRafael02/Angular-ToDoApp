@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
-import { UserService } from 'src/Providers/psql.provider';
+import { UserService } from 'src/Providers/user.provider';
 import { User } from 'src/Entities/users';
 
 @Controller('user')

@@ -9,7 +9,9 @@ import { Conditions } from './Entities/conditions';
 import { Categories } from './Entities/categories';
 import { Task, taskView } from './Entities/tasks';
 
-import { miscService, taskViewService, UserService } from './Providers/psql.provider';
+import { miscService } from './Providers/misc.provider';
+import { taskViewService } from './Providers/task.provider';
+import { UserService } from './Providers/user.provider';
 import { MiscController } from './Controllers/misc/misc.controller';
 import { TaskController } from './Controllers/task/task.controller';
 import { UserController } from './Controllers/user/user.controller';
@@ -30,9 +32,9 @@ import { UserController } from './Controllers/user/user.controller';
           Categories,
           taskView
           ],
-        //synchronize: true,
+        synchronize: true,
         logging: true,
-        //autoLoadEntities: true,
+        autoLoadEntities: true,
     }),
     TypeOrmModule.forFeature([
       User,
