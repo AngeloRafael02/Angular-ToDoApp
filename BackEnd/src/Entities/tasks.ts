@@ -2,8 +2,6 @@ import {
     Entity, 
     Column, 
     PrimaryGeneratedColumn, 
-    CreateDateColumn,
-    UpdateDateColumn,
     ManyToOne,
     ViewEntity,
     PrimaryColumn,
@@ -17,37 +15,37 @@ import { User } from "./users";
 @Entity()
 export class Task{
     @PrimaryGeneratedColumn()
-    id:number
+    id?:number
 
     @Column({type:'varchar',length:50, nullable:false})
     title:string
 
     @Column({type:'varchar', length:255, nullable:true})
-    note:string
+    note?:string
 
     @ManyToOne(() => Categories, (category) => category.id) 
-    @Column("smallint", { name: "cat_id", nullable: false })
-    category: Categories;
+    @Column({type: 'int', nullable:false, default:1 })
+    cat_id:number;
 
-    @Column({type:'int', default:0})
-    prio:number
+    @Column({type:'int', nullable: true})
+    prio?:number
     
     @ManyToOne(() => Conditions, (conditions) => conditions.id) // Define foreign key relationship
-    @Column("smallint", { name: "stat_id", default: 1, nullable:false })
-    conditions:Conditions
+    @Column({type: 'int', default: 1, nullable:true })
+    stat_id?:number;
 
-    @CreateDateColumn({ type: 'time without time zone', default: () => 'CURRENT_TIMESTAMP',nullable:false })
-    created_at:Date
+    @Column({ type: 'timestamp without time zone',default: () => "CURRENT_TIMESTAMP", nullable:true })
+    created_at?:Date
 
-    @UpdateDateColumn({ type: 'time without time zone', default: () => 'CURRENT_TIMESTAMP',nullable:false  })
-    last_edited:Date
+    @Column({ type: 'timestamp without time zone',default: () => "CURRENT_TIMESTAMP", nullable:true })
+    last_edited?:Date
 
-    @Column({type:'time without time zone', nullable:true})
-    deadline:Date
+    @Column({type:'timestamp without time zone', nullable:true})
+    deadline?:Date
 
     @ManyToOne(() => User, (user) => user.id) // Define foreign key relationship
-    @Column({ type: 'int', nullable: false, name: "owner_id" }) // Keep the owner_id in database
-    owner: User;
+    @Column({ type: 'int', nullable: false }) // Keep the owner_id in database
+    owner_id: number;
 };
 
 @ViewEntity({
