@@ -1,4 +1,4 @@
-import { Component,Inject,OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PostgresService } from '../../services/postgres.service';
 import { MiscService } from '../../services/misc.service';
 import { taskViewInterface } from '../../interfaces';
@@ -12,7 +12,7 @@ import { ToDoFormComponent } from '../to-do-form/to-do-form.component';
     CommonModule
   ],
   template:`  
-    <table>
+    <table id="tasks">
       <thead>
         <tr>
           <th *ngFor="let col of taskColumns">{{col}}</th>
@@ -25,17 +25,20 @@ import { ToDoFormComponent } from '../to-do-form/to-do-form.component';
           <td>{{item.Description}}</td>
           <td>{{item.Category}}</td>
           <td>{{item.Priority}}</td>
+          <td>{{item["Threat Level"]}}</td>
           <td>{{item.Status}}</td>
           <td>{{item.Deadline}}</td>
           <td>{{item["Created At"]}}</td>
           <td>{{item["Last Edited"]}}</td>
           <td>
+            <button (click)="finishTask(item.ID)">Finish</button>
             <button (click)="updateTask(item.ID)">Update</button>
             <button (click)="deleteTask(item.ID)">Delete</button>
           </td>
-          <td>{{item.CID}}</td>
           <td>{{item.SID}}</td>
+          <td>{{item.TID}}</td>
           <td>{{item.UID}}</td>
+          <td>{{item.CID}}</td>
         </tr>
       </tbody>
     </table>
@@ -43,6 +46,16 @@ import { ToDoFormComponent } from '../to-do-form/to-do-form.component';
   styles:`
     table {width: 100%;}
     td{text-align: center;}
+    table#tasks td:first-child,
+    table#tasks th:first-child,
+    table#tasks th:nth-child(9),
+    table#tasks td:nth-child(9),
+    table#tasks th:nth-child(10),
+    table#tasks td:nth-child(10),
+    table#tasks th:nth-child(11) ~ th,
+    table#tasks td:nth-child(11) ~ td{
+      display:none
+    }
   `
 })
 export class ToDoListComponent implements OnInit {
@@ -60,10 +73,11 @@ export class ToDoListComponent implements OnInit {
   ngOnInit(): void {
     this.psql.getColumnHeaders('task_view').subscribe(data => {
       this.taskColumns = data;
-      this.taskColumns = this.misc.insertArrayAtIndex(this.taskColumns,["Options"],9)
+      this.taskColumns = this.misc.insertArrayAtIndex(this.taskColumns,["Options"],10)
       console.log(this.taskColumns);
     });
     this.psql.getAllTaskByID(1).subscribe(data => {
+      console.log(data)
       this.sampleData = data;
     });
   }
@@ -77,7 +91,10 @@ export class ToDoListComponent implements OnInit {
 
   public deleteTask(ID:number){
     this.psql.deleteOneTask(ID);
-    window.location.reload();
+  }
+
+  public finishTask(ID:number){
+    
   }
 
 }

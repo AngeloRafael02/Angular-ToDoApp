@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { categoriesInterface, conditionInterface, taskInterface, taskViewInterface } from '../interfaces';
+import { Observable, Subscription } from 'rxjs';
+import { categoriesInterface, conditionInterface, taskInterface, taskViewInterface, threatInterface } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +23,10 @@ export class PostgresService {
     return this.http.get<conditionInterface[]>(`${this.nestJS}/Misc/allCond`);
   }
 
+  public getAllThreats():Observable<threatInterface[]>{
+    return this.http.get<threatInterface[]>(`${this.nestJS}/Misc/allThreats`);
+  }
+
   public getAllTaskByID(id:number):Observable<taskViewInterface[]>{
     return this.http.get<taskViewInterface[]>(`${this.nestJS}/task/all/${id}`)
   }
@@ -35,7 +39,25 @@ export class PostgresService {
     return this.http.get<string[]>(`${this.nestJS}/misc/col/${table}`);
   }
 
-  public addTask(taskObj:taskInterface){
-    return this.http.post(`${this.nestJS}/task`,taskObj);
+  public addTask(taskObj:taskInterface):Subscription{
+    return this.http.post(`${this.nestJS}/task`,taskObj).subscribe(data => {
+      console.log(data);
+    });
+  }
+
+  public updateOneTask(taskObj:taskInterface, ID:number):Subscription{
+    return this.http.put(`${this.nestJS}/task/${ID}`,taskObj).subscribe(data => {
+      console.log(data);
+    });
+  }
+
+  public finishOneTask(){
+    
+  }
+
+  public deleteOneTask(taskID:number){
+    return this.http.delete(`${this.nestJS}/task/${taskID}`).subscribe(data => {
+      console.log(data);
+    });
   }
 }

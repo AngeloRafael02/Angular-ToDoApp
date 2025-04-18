@@ -1,10 +1,11 @@
 import { Component,Inject,OnInit } from '@angular/core';
 import { PostgresService } from '../../services/postgres.service';
-import { categoriesInterface, conditionInterface, dialogDataInterface, taskInterface } from '../../interfaces';
-import { ReactiveFormsModule, FormBuilder,Validators} from "@angular/forms";
+import { categoriesInterface, conditionInterface, dialogDataInterface, taskInterface, threatInterface } from '../../interfaces';
+import { ReactiveFormsModule, FormBuilder,Validators, FormGroup, FormControl} from "@angular/forms";
 import { CommonModule } from '@angular/common';
-import { MatDialogRef,MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MiscService } from '../../services/misc.service';
 
 @Component({
   selector: 'app-to-do-form',
@@ -26,16 +27,21 @@ import { MatButtonModule } from '@angular/material/button';
         <textarea id="note" formControlName="note"></textarea>
         <br><br>
         <label for="category">Category: </label>
-        <select id="category" >
-          <option *ngFor="let category of taskCategories" value="{{category.id}}">{{category.cat}}</option>
+        <select id="category" formControlName="cat_id">
+          <option *ngFor="let category of taskCategories" value={{category.id}}>{{category.cat}}</option>
         </select>
         <br><br>
         <label for="prio">Priority: </label>
-        <input type="number" min="0" name="prio" id="prio" formControlName="prio">
+        <input type="number" min="0" id="prio" formControlName="prio">
+        <br><br>
+        <label for="threat_level">Threat Level: </label>
+        <select id="threat_level" formControlName="threat_id">
+          <option *ngFor="let threat of taskThreatLevels" value="{{threat.id}}">{{threat.level}}</option>
+        </select>
         <br><br>
         <label for="status">Status: </label>
-        <select id="status" >
-            <option *ngFor="let status of taskConditions" value="{{status.id}}">{{status.stat}}</option>
+        <select id="status" formControlName="stat_id">
+          <option *ngFor="let status of taskConditions" value="{{status.id}}">{{status.stat}}</option>
         </select>
         <br><br>
         <label for="deadline">Deadline:</label>
@@ -43,8 +49,7 @@ import { MatButtonModule } from '@angular/material/button';
         <br><br>
       </div>
       <div mat-dialog-actions  align="left">
-            <button mat-flat-button class="modalBTN" type="submit">Submit</button>&#9; 
-            <button mat-flat-button class="modalBTN" (click)="closeDialog()">Close</button>
+        <button mat-flat-button class="modalBTN" type="submit">Submit</button>
       </div>
     </form>
   </div>
@@ -52,7 +57,7 @@ import { MatButtonModule } from '@angular/material/button';
   styles:`
     #note{ resize:none; }
     #formBox{ width:500px; padding:1%; }
-    .modalBTN{margin-left:1%; margin-bottom:1%;}
+    .modalBTN{ margin-left:1%; margin-bottom:1%; }
   `
 })
 export class ToDoFormComponent implements OnInit{
@@ -60,14 +65,27 @@ export class ToDoFormComponent implements OnInit{
   public mode:string = '';
   public taskID:number = 0;
 
-  public taskForm:any;
-  public taskCategories:categoriesInterface[] = []
-  public taskConditions:conditionInterface[] = []
+  public taskForm:FormGroup = new FormGroup({
+      id: new FormControl<number | null>(null), 
+      title: new FormControl<string>('', Validators.required),
+      note: new FormControl<string>(''),
+      cat_id: new FormControl<number>(1, Validators.required),
+      prio: new FormControl<number>(1),
+      threat_id: new FormControl<number>(1,Validators.required),
+      stat_id: new FormControl<number>(1, Validators.required),
+      created_at: new FormControl<Date>(new Date()),
+      last_edited: new FormControl<Date>(new Date()),
+      deadline: new FormControl(new Date().toLocaleString()),
+      owner_id: new FormControl<number>(1, Validators.required),
+  });
+  public taskCategories:categoriesInterface[] = [];
+  public taskConditions:conditionInterface[] = [];
+  public taskThreatLevels:threatInterface[] = [];
 
   constructor(
-    private self:MatDialogRef<ToDoFormComponent>,
     private fb: FormBuilder,
     private psql:PostgresService,
+    private misc:MiscService,
 
     @Inject(MAT_DIALOG_DATA) public data:dialogDataInterface,
   ){
@@ -78,16 +96,18 @@ export class ToDoFormComponent implements OnInit{
   ngOnInit(): void {
     this.psql.getAllCategories().subscribe(data => this.taskCategories = data);
     this.psql.getAllConditions().subscribe(data => this.taskConditions = data);
+    this.psql.getAllThreats().subscribe(data => this.taskThreatLevels = data);
     this.taskForm = this.fb.group({ 
-      "title":["", [Validators.required, Validators.maxLength(50)]],
-      "note":["",Validators.maxLength(255)],
-      "cat_id":[1,Validators.required],
-      "prio":[null, Validators.min(0)],
-      "stat_id":[2, Validators.required],
-      "created_at":[new Date().toISOString(),Validators.required],
-      "last_edited":[new Date().toISOString(),Validators.required],
-      "deadline":[new Date()],
-      "owner_id":[1,Validators.required]
+      title:["", [Validators.required, Validators.maxLength(50)]],
+      note:["",Validators.maxLength(255)],
+      cat_id:[1,Validators.required],
+      prio:[null, Validators.min(0)],
+      threat_id:[1, Validators.required],
+      stat_id:[1, Validators.required],
+      created_at:[new Date(),Validators.required],
+      last_edited:[new Date(),Validators.required],
+      deadline:[''],
+      owner_id:[1]
     });
     if (this.mode == 'update'){
       this.psql.getOneTaskByID(this.taskID).subscribe(data => {
@@ -96,31 +116,46 @@ export class ToDoFormComponent implements OnInit{
           note:data.Description,
           cat_id:data.CID,
           prio:data.Priority,
+          threat_id:data["TID"],
           stat_id:data.SID,
           created_at:data["Created At"],
           last_edited:data["Last Edited"],
           deadline:data.Deadline,
           owner_id:data.UID
         });
+        alert(this.misc.DateUndefinedConverter(data.Deadline));
       });
+    } else if (this.mode == 'new'){
+      this.taskForm.get('stat_id')?.disable();
     }
   }
 
   onSubmit():void {
     if (this.taskForm.valid) {
+      const deadlineInput:string = this.taskForm.value.deadline
+      const date = new Date(deadlineInput);
+        date.setHours(23);
+        date.setMinutes(59);
+        date.setSeconds(59);
+        date.setMilliseconds(999); 
+      this.taskForm.patchValue({ 
+        cat_id: parseInt(this.taskForm.value.cat_id),
+        deadline: date.toLocaleString(),
+        owner_id:1
+      });
+      
+      let input:taskInterface = this.taskForm.value;
+      console.log(input)
       if (this.mode == 'new'){
-        alert("??d")
+        console.log(this.taskForm.value);
         this.psql.addTask(this.taskForm.value);
-      } else { //mode = update
+      } else if (this.mode == 'update'){ //mode = update
         alert("not new");
-        //this.psql.updateOneTask(this.taskForm.value, this.taskID);
+        this.psql.updateOneTask(this.taskForm.value, this.taskID);
       }
     } else {
       console.log("Form is invalid");
     }
   }
 
-  public closeDialog(){
-    this.self.close(false);
-  }
 }

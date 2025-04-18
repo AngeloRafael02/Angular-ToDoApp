@@ -18,4 +18,11 @@ export class MiscService {
     ];
     return result;
   }
+
+  public DateUndefinedConverter(value:Date | undefined):string{
+    if (value) {
+      return value.toDateString();
+    }
+    return "1970-01-01";
+  }
 }
