@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { Task } from "src/Entities/tasks";
 import { Categories } from "src/Entities/categories";
 import { Conditions } from "src/Entities/conditions";
+import { Threats } from 'src/Entities/threats';
 
 @Injectable()
 export class miscService{
@@ -16,7 +17,10 @@ export class miscService{
         private CondRepository: Repository<Conditions>,
 
         @InjectRepository(Task)
-        private TaskRepositoy:Repository<Task>
+        private TaskRepositoy:Repository<Task>,
+
+        @InjectRepository(Threats)
+        private Threatrepository:Repository<Threats>
     ) {}
 
     public async findAllCat(): Promise<Categories[]> {
@@ -25,6 +29,10 @@ export class miscService{
 
     public async findAllCond(): Promise<Conditions[]> {
         return await this.CondRepository.find();
+    }
+
+    public async findAllThreats(){
+        return await this.Threatrepository.find();
     }
 
     async getColumnNames(tableName: string): Promise<string[]> {
@@ -40,11 +48,12 @@ export class miscService{
                 WHEN 'Description' THEN 3
                 WHEN 'Category' THEN 4
                 WHEN 'Priority' THEN 5
-                WHEN 'Status' THEN 6
-                WHEN 'Deadline' THEN 7
-                WHEN 'Created At' THEN 8
-                WHEN 'Last Edited' THEN 9
-                ELSE 10 -- For any other columns
+                WHEN 'Threat Level' THEN 6
+                WHEN 'Status' THEN 7
+                WHEN 'Deadline' THEN 8
+                WHEN 'Created At' THEN 9
+                WHEN 'Last Edited' THEN 10
+                ELSE 11 -- For any other columns
             END
         `,[tableName]);
         return rawData.map((row) => row.column_name);

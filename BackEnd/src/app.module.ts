@@ -15,6 +15,7 @@ import { UserService } from './Providers/user.provider';
 import { MiscController } from './Controllers/misc/misc.controller';
 import { TaskController } from './Controllers/task/task.controller';
 import { UserController } from './Controllers/user/user.controller';
+import { Threats } from './Entities/threats';
 
 @Module({
   imports: [
@@ -30,7 +31,8 @@ import { UserController } from './Controllers/user/user.controller';
           Task,
           Conditions,
           Categories,
-          taskView
+          taskView,
+          Threats
           ],
         synchronize: true,
         logging: true,
@@ -41,7 +43,8 @@ import { UserController } from './Controllers/user/user.controller';
       Conditions,
       Categories,
       Task,
-      taskView
+      taskView,
+      Threats
     ]),
   ],
   controllers: [

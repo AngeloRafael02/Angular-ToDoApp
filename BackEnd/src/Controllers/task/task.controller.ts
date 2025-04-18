@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
 import { taskViewService } from 'src/Providers/task.provider';
 import { Task, taskView } from 'src/Entities/tasks';
+import { UpdateResult } from 'typeorm';
 
 @Controller('task')
 export class TaskController {
@@ -17,13 +18,18 @@ export class TaskController {
     }
   
     @Post()
-    create(@Body() taskData: Task): Promise<Task> {
-      return this.TaskService.createOne(taskData)
+    create(@Body() taskData: Partial<Task>){
+      this.TaskService.createOne(taskData)
     }
   
     @Put(':id')
     update(@Param('id', ParseIntPipe) id: number, @Body() userData: Partial<Task>): Promise<Task> {
       return this.TaskService.update(id, userData);
+    }
+
+    @Put('finish/:id')
+    finishTask(@Param('id', ParseIntPipe)id:number):Promise<UpdateResult>{
+      return this.TaskService.finishTask(id);
     }
   
     @Delete(':id')

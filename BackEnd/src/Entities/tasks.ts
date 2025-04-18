@@ -11,27 +11,31 @@ import {
 import { Categories } from "./categories";
 import { Conditions } from "./conditions";
 import { User } from "./users";
+import { Threats } from "./threats";
 
 @Entity()
 export class Task{
-    @PrimaryGeneratedColumn()
-    id?:number
+    @PrimaryGeneratedColumn({ name:'id', type:'bigint' })
+    id!:number
 
-    @Column({type:'varchar',length:50, nullable:false})
+    @Column({ type:'varchar',length:50, nullable:false })
     title:string
 
-    @Column({type:'varchar', length:255, nullable:true})
+    @Column({ type:'varchar', length:255, nullable:true })
     note?:string
 
-    @ManyToOne(() => Categories, (category) => category.id) 
-    @Column({type: 'int', nullable:false, default:1 })
+    //@ManyToOne(() => Categories, (category) => category.id) 
+    @Column({ type: 'int', nullable:false, default:1 })
     cat_id:number;
 
-    @Column({type:'int', nullable: true})
+    @Column({ type:'int', nullable: true })
     prio?:number
     
-    @ManyToOne(() => Conditions, (conditions) => conditions.id) // Define foreign key relationship
-    @Column({type: 'int', default: 1, nullable:true })
+    @Column({ type:'int', default:1, nullable:true })
+    threat_id?:number;
+
+    //@ManyToOne(() => Conditions, (conditions) => conditions.id) // Define foreign key relationship
+    @Column({ type: 'int', default: 1, nullable:true })
     stat_id?:number;
 
     @Column({ type: 'timestamp without time zone',default: () => "CURRENT_TIMESTAMP", nullable:true })
@@ -40,10 +44,10 @@ export class Task{
     @Column({ type: 'timestamp without time zone',default: () => "CURRENT_TIMESTAMP", nullable:true })
     last_edited?:Date
 
-    @Column({type:'timestamp without time zone', nullable:true})
+    @Column({ type:'timestamp without time zone', nullable:true })
     deadline?:Date
 
-    @ManyToOne(() => User, (user) => user.id) // Define foreign key relationship
+    //@ManyToOne(() => User, (user) => user.id) // Define foreign key relationship
     @Column({ type: 'int', nullable: false }) // Keep the owner_id in database
     owner_id: number;
 };
@@ -57,16 +61,19 @@ export class Task{
     .addSelect("cat.cat","Category")
     .addSelect("t.prio","Priority")
     .addSelect("con.stat","Status")
+    .addSelect("th.level","Threat Level")
     .addSelect("t.deadline", "Deadline")
     .addSelect("t.created_at", "Created At")
     .addSelect("t.last_edited", "Last Edited")
     .addSelect("t.stat_id","SID")
     .addSelect("t.cat_id", "CID")
     .addSelect("u.id","UID")
+    .addSelect("th.id", "TID")
     .from(Task, "t")
     .innerJoin(Categories, "cat", "t.cat_id = cat.id")
     .innerJoin(Conditions, "con", "t.stat_id = con.id")
     .innerJoin(User, "u", "t.owner_id = u.id")
+    .innerJoin(Threats,"th","t.threat_id = th.id")
 })
 export class taskView {
     @PrimaryColumn({name:'ID'})
@@ -83,6 +90,9 @@ export class taskView {
 
     @ViewColumn({name:'Priority'})
     Priority:number
+
+    @ViewColumn({name:"Threat Level"})
+    "Threat Level":string
 
     @ViewColumn({name:'Status'})
     Status:string
@@ -104,4 +114,7 @@ export class taskView {
 
     @ViewColumn({name:'UID'})
     UID:number
+
+    @ViewColumn({name:'TID'})
+    TID:number
 }
