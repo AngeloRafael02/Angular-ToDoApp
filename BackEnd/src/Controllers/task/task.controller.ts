@@ -28,7 +28,7 @@ export class TaskController {
     }
 
     @Put('finish/:id')
-    finishTask(@Param('id', ParseIntPipe)id:number):Promise<UpdateResult>{
+    finishTask(@Param('id', ParseIntPipe) id: number):Promise<UpdateResult>{
       return this.TaskService.finishTask(id);
     }
   
