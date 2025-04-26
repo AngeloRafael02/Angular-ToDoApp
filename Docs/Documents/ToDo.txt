@@ -1,7 +1,19 @@
 BackEnd
-> add new controllers to app.module - DONE
+> Create a Database Service to connect to cloud DB if 
+    Local DB does not connect successfully
+> Modfy Query -  Order by Deadline - DONE
+> Task Query pagination
 FrontEnd
-> Design To Do List - first    
+> Stylize Table
+    - Task row color: - IN PROGRESS
+        green  = more than 5 days in deadline
+        orage =  5 days or less in deadline
+        red = day of deadline or past deadline
+    - Threat Cell color - DONE
+        low = green
+        medium = yellow
+        High = orage
+        alarming = red
+        Inevitable = black
 
 ERRORS:
-    Parse Date to string for input on ToDoForm
