@@ -2,7 +2,6 @@ import {
     Entity, 
     Column, 
     PrimaryGeneratedColumn, 
-    ManyToOne,
     ViewEntity,
     PrimaryColumn,
     ViewColumn,
@@ -17,8 +16,7 @@ import { Threats } from "./threats";
 export class Task{
     @PrimaryGeneratedColumn({ name:'id', type:'bigint' })
     id!:number
-
-    @Column({ type:'varchar',length:50, nullable:false })
+    @Column({ type:'varchar',length:50, nullable:false, unique:true })
     title:string
 
     @Column({ type:'varchar', length:255, nullable:true })
