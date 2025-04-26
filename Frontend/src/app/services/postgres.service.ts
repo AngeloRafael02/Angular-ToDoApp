@@ -51,8 +51,10 @@ export class PostgresService {
     });
   }
 
-  public finishOneTask(){
-    
+  public finishOneTask(ID:number){
+    return this.http.put(`${this.nestJS}/task/finish/${ID}`,{}).subscribe(data=>{
+      console.log(data)
+    });
   }
 
   public deleteOneTask(taskID:number){

@@ -5,7 +5,6 @@ import { ReactiveFormsModule, FormBuilder,Validators, FormGroup, FormControl} fr
 import { CommonModule } from '@angular/common';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
-import { MiscService } from '../../services/misc.service';
 
 @Component({
   selector: 'app-to-do-form',
@@ -45,7 +44,7 @@ import { MiscService } from '../../services/misc.service';
         </select>
         <br><br>
         <label for="deadline">Deadline:</label>
-        <input type="date" id="deadline" formControlName="deadline"> 
+        <input type="date" id="deadline" formControlName="deadline" value="{{this.DeadlineStrValue}}">  
         <br><br>
       </div>
       <div mat-dialog-actions  align="left">
@@ -64,6 +63,7 @@ export class ToDoFormComponent implements OnInit{
   
   public mode:string = '';
   public taskID:number = 0;
+  public DeadlineStrValue:string ='';
 
   public taskForm:FormGroup = new FormGroup({
       id: new FormControl<number | null>(null), 
@@ -85,7 +85,6 @@ export class ToDoFormComponent implements OnInit{
   constructor(
     private fb: FormBuilder,
     private psql:PostgresService,
-    private misc:MiscService,
 
     @Inject(MAT_DIALOG_DATA) public data:dialogDataInterface,
   ){
@@ -123,7 +122,7 @@ export class ToDoFormComponent implements OnInit{
           deadline:data.Deadline,
           owner_id:data.UID
         });
-        alert(this.misc.DateUndefinedConverter(data.Deadline));
+        this.DeadlineStrValue = data.Deadline.toString().slice(0,10); //workaround for deadline value not appearing in <input>
       });
     } else if (this.mode == 'new'){
       this.taskForm.get('stat_id')?.disable();
