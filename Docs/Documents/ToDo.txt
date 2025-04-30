@@ -5,11 +5,18 @@ BackEnd
 > Task Query pagination
 FrontEnd
 > Stylize Table
-    - Task row color: - IN PROGRESS
+    - Task row color based on Deadline: - DONE
         green  = more than 5 days in deadline
         orage =  5 days or less in deadline
-        red = day of deadline or past deadline
+        red = day of deadline 
+        black = past deadline
     - Threat Cell color - DONE
+        low = green
+        medium = yellow
+        High = orage
+        alarming = red
+        Inevitable = black
+    - Status Cell color - DONE
         low = green
         medium = yellow
         High = orage
