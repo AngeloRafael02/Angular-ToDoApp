@@ -51,13 +51,13 @@ export class PostgresService {
     });
   }
 
-  public finishOneTask(ID:number){
+  public finishOneTask(ID:number):Subscription{
     return this.http.put(`${this.nestJS}/task/finish/${ID}`,{}).subscribe(data=>{
       console.log(data)
     });
   }
 
-  public deleteOneTask(taskID:number){
+  public deleteOneTask(taskID:number):Subscription{
     return this.http.delete(`${this.nestJS}/task/${taskID}`).subscribe(data => {
       console.log(data);
     });
