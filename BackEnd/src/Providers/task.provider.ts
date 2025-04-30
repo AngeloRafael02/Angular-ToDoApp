@@ -36,8 +36,7 @@ export class taskViewService{
                 UID:id,
                 Status:'Unfinished'
             }, order:{
-                ID:'ASC',
-                Deadline:'DESC'
+                Deadline:'ASC'
             }
         });
     }
