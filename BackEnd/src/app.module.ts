@@ -19,13 +19,16 @@ import { Threats } from './Entities/threats';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-        type: 'postgres',
-        host: '192.168.1.70',
-        port: 5432,
-        password: '820824',
-        username: 'angelorafael',
-        database: 'tododb',
+    ConfigModule.forRoot({isGlobal:true}),
+    TypeOrmModule.forRootAsync({
+      inject:[ConfigService],
+      useFactory:(configService:ConfigService) => ({
+        type:'postgres',
+        host:configService.get<string>('HOST'),
+        port:configService.get<number>('DB_PORT'),
+        username:configService.get<string>('USERNAME'),
+        password:configService.get<string>('PASSWORD'),
+        database:configService.get<string>('DB'),
         entities: [
           User,
           Task,
@@ -33,10 +36,11 @@ import { Threats } from './Entities/threats';
           Categories,
           taskView,
           Threats
-          ],
-        synchronize: true,
-        logging: true,
-        autoLoadEntities: true,
+        ],
+        synchronize:true,
+        logging:true,
+        autoLoadEntities:true
+      })
     }),
     TypeOrmModule.forFeature([
       User,
