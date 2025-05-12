@@ -47,16 +47,21 @@ import { MatButtonModule } from '@angular/material/button';
         <input type="date" id="deadline" formControlName="deadline" value="{{this.DeadlineStrValue}}">  
         <br><br>
       </div>
-      <div mat-dialog-actions  align="left">
+      <div mat-dialog-actions align="left">
         <button mat-flat-button class="modalBTN" type="submit">Submit</button>
       </div>
     </form>
   </div>
   `,
   styles:`
+    @use '../../../styles.scss' as c ;
     #note{ resize:none; }
     #formBox{ width:500px; padding:1%; }
-    .modalBTN{ margin-left:1%; margin-bottom:1%; }
+    .modalBTN{ 
+      @include c.buttonColors;
+      margin-left:1%; 
+      margin-bottom:1%; 
+    }
   `
 })
 export class ToDoFormComponent implements OnInit{
@@ -132,14 +137,14 @@ export class ToDoFormComponent implements OnInit{
   onSubmit():void {
     if (this.taskForm.valid) {
       const deadlineInput:string = this.taskForm.value.deadline
-      const date = new Date(deadlineInput);
+      const date:Date = new Date(deadlineInput);
         date.setHours(23);
         date.setMinutes(59);
         date.setSeconds(59);
         date.setMilliseconds(999); 
       this.taskForm.patchValue({ 
         cat_id: parseInt(this.taskForm.value.cat_id),
-        deadline: date.toLocaleString(),
+        deadline: !isNaN(date.getTime()) ? date.toLocaleString():null,
         owner_id:1
       });
       
