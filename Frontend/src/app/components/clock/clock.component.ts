@@ -4,7 +4,7 @@ import { Component, OnInit  } from '@angular/core';
   selector: 'app-clock',
   imports: [],
   template: `<h3> Current Time: {{hour}}:{{minute}}:{{second}} {{ampm}}</h3>`,
-  styles: `h3{text-align:center; padding:20px 0px 20px 0px;}`
+  styles: `h3{text-align:center; padding:20px 0px 20px 0px; color:white;}`
 })
 export class ClockComponent implements OnInit  {
   private daysArray:string[] = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
