@@ -3,7 +3,13 @@ BackEnd
     Local DB does not connect successfully
 > Modfy Query -  Order by Deadline - DONE
 > Task Query pagination
+
 FrontEnd
+> Implement Color Pallete - DONE
+    - #35374B
+    - #344955
+    - #50727B
+    - #78A083
 > Stylize Table
     - Task row color based on Deadline: - DONE
         green  = more than 5 days in deadline
@@ -22,5 +28,6 @@ FrontEnd
         High = orage
         alarming = red
         Inevitable = black
+> Add Alert to confim deletion of Task
 
 ERRORS:
