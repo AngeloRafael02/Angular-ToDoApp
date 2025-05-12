@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { MatDialog,MatDialogRef } from "@angular/material/dialog";
 import { MatButtonModule } from '@angular/material/button';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 import { ClockComponent } from './components/clock/clock.component';
 import { ToDoFormComponent } from './components/to-do-form/to-do-form.component';
@@ -13,6 +14,7 @@ import { ToDoListComponent } from './components/to-do-list/to-do-list.component'
     MatButtonModule, 
     ToDoListComponent,
     ClockComponent,
+    MatGridListModule
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'

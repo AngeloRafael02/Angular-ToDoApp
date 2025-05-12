@@ -1,3 +1,21 @@
-<app-clock></app-clock>
-<button mat-flat-button color="primary" type="button" (click)="OpenModal()" id="newTaskBTN">New Task</button>
-<app-to-do-list></app-to-do-list>
+
+
+<mat-grid-list cols="12" rowHeight="100px">
+  <mat-grid-tile colspan="3"> <div></div>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="6"> <div><app-clock></app-clock></div>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="3"> <div></div>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="3"> 
+    <div>
+        <button mat-flat-button color="primary" type="button" (click)="OpenModal()" id="newTaskBTN">New Task</button>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="9"> <div></div>
+  </mat-grid-tile>
+</mat-grid-list>
+<div id="list">
+    <app-to-do-list></app-to-do-list>
+</div>
+
