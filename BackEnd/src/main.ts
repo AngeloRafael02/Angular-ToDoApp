@@ -9,6 +9,5 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const port = configService.get<number>('NESTJS_PORT');
   await app.listen(port ?? 3000);
-  console.log(process.env.HOST)
 }
 bootstrap();

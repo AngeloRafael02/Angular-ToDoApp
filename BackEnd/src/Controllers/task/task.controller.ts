@@ -2,7 +2,6 @@ import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@
 import { taskViewService } from 'src/Providers/task.provider';
 import { Task, taskView } from 'src/Entities/tasks';
 import { UpdateResult } from 'typeorm';
-
 @Controller('task')
 export class TaskController {
     constructor(private readonly TaskService: taskViewService) {}
