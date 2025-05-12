@@ -16,4 +16,4 @@ API
 Backend
 - NestJS
 - TypeORM
-- POstgres
+- Postgres
