@@ -9,6 +9,7 @@ import { ToDoFormComponent } from '../to-do-form/to-do-form.component';
 import { PostgresService } from '../../services/postgres.service';
 import { MiscService } from '../../services/misc.service';
 import { taskViewInterface } from '../../interfaces';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'app-to-do-list',
@@ -25,6 +26,7 @@ export class ToDoListComponent implements OnInit{
 
   constructor(
     private matDialog:MatDialog,
+    private loadingService:LoadingService,
     private psql:PostgresService,
     private misc:MiscService,
   ){}
@@ -35,14 +37,20 @@ export class ToDoListComponent implements OnInit{
 
 
   ngOnInit(): void {
-    this.psql.getColumnHeaders('task_view').subscribe(data => {
-      this.taskColumns = data;
-      this.taskColumns = this.misc.insertArrayAtIndex(this.taskColumns,["Options"],10)
-    });
-    this.psql.getAllTaskByID(1).subscribe(data => {
-      this.dataSource = new MatTableDataSource<taskViewInterface>(data);
-    });
-    
+    try {
+      this.loadingService.loadingOn();
+      this.psql.getColumnHeaders('task_view').subscribe(data => {
+        this.taskColumns = data;
+        this.taskColumns = this.misc.insertArrayAtIndex(this.taskColumns,["Options"],10)
+      });
+      this.psql.getAllTaskByID(1).subscribe(data => {
+        this.dataSource = new MatTableDataSource<taskViewInterface>(data);
+      });
+    } catch (error) {
+      
+    } finally {
+      this.loadingService.loadingOff()
+    }
   }
 
   public updateTask(task:number){
@@ -61,7 +69,12 @@ export class ToDoListComponent implements OnInit{
   }
 
   public deadlineFormatHelper(deadline:string):string{
-    return deadline || deadline.trim() !== '' ? deadline.toString().slice(0,10) : '';
+    if (deadline == null){
+      return  '';
+    } else {
+      return deadline || deadline.trim() !== '' ? deadline.toString().slice(0,10) : '';
+
+    }
   }
   
   public getThreatLevelCellClass(threat:string): string {
@@ -105,7 +118,11 @@ export class ToDoListComponent implements OnInit{
   }
 
   public evaluateDate(row:taskViewInterface):string {
-    const dateString =  row.Deadline
+    const dateString = row.Deadline
+    if (dateString == null) {
+      return 'whiteRow';
+    }
+    
     const inputDate:Date = new Date(dateString);
     inputDate.setHours(0, 0, 0, 0);
     const today:Date = new Date();

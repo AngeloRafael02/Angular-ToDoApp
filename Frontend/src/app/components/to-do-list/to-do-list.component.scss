@@ -1,22 +1,43 @@
-td,th{ text-align: center; }
-th {border: 2px solid black; background-color:dimgray;}
-table#tasks td:first-child,
-table#tasks th:first-child,
-table#tasks th:nth-child(9),
-table#tasks td:nth-child(9),
-table#tasks th:nth-child(10),
-table#tasks td:nth-child(10),
-table#tasks th:nth-child(11) ~ th,
-table#tasks td:nth-child(11) ~ td{ display:none }
-.optionBTN { width: 50px; margin-left:5px; }
+@use '../../../styles.scss' as c;
+@use '../../app.component.scss' as app;
+
+table,th,td   {
+    border: 1px solid black;
+    th,td {
+      text-align: center;
+      &:first-child,
+      &:nth-child(9),
+      &:nth-child(10),
+      &:nth-child(11) ~ th,
+      &:nth-child(11) ~ td{ /* Using the parent selector '&' */
+        display: none;
+      }
+    }
+    th{
+      @include c.buttonColors;
+    }
+    td{
+        border: 1px solid black;
+    }
+}
+
+
+
+.optionBTN { 
+    @include c.buttonColors;
+    width: 50px; 
+    margin-left:5px;
+}
+
 .greenCell,.greenRow { background-color: lightgreen; }
 .orangeCell,.orangeRow { background-color: orange; }
 .redCell,.redRow { background-color: lightcoral;  }
-.greyCell{ background-color:grey; }
+.greyCell{ background-color:dimgray; color:white; }
 .yellowCell{ background-color:yellow; }
 .aquaCell{ background-color:aqua;}
 .lightblueCell{ background-color:lightblue;}
 .coralCell{ background-color:coral;}
 .bluevioletCell{ background-color:blueviolet;}
 .whiteCell,.whiteRow{ background-color:white;}
-.blackCell,.blackRow { background-color: black; color:white; }
+.blackCell,.blackRow { background-color: darkgray;}
+
