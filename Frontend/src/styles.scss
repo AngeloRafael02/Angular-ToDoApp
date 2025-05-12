@@ -2,5 +2,22 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+$color1:#35374B;
+$color2:#344955;
+$color3:#50727B;
+$color4:#78A083;
+
+@mixin buttonColors {
+    color: white;
+    background-color: $color3;
+}
+
+html, body { 
+    height: 100%;
+    body { 
+        margin: 0; 
+        font-family: Roboto, "Helvetica Neue", sans-serif; 
+        background-color: $color1;
+    }
+    
+}

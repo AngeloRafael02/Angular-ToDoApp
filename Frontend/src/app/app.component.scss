@@ -1,4 +1,17 @@
+@use '../styles.scss' as c;
+
 #newTaskBTN{
+    @include c.buttonColors;
     margin-bottom: 10px;
     margin-left: 20px;
+}
+
+#list{
+    padding-left: 5vh;
+    padding-right: 5vh;
+}
+
+.buttonBase{
+    color: white;
+    background-color: #50727B;
 }
