@@ -1,3 +1,4 @@
 .env
 BackEnd/src/.development.env
 Docs/SQL/devSQLs.sql
+Docs/Documents/curls.tests.txt
