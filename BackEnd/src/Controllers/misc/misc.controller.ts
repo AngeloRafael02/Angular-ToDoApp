@@ -1,32 +1,39 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, HttpCode, Param, UseGuards } from '@nestjs/common';
+import { ThrottlerGuard } from '@nestjs/throttler';
+import { miscPrefix } from 'src/app.enums';
 import { Categories } from 'src/Entities/categories';
 import { Conditions } from 'src/Entities/conditions';
 import { Threats } from 'src/Entities/threats';
 import { miscService } from 'src/Providers/misc.provider';
 
-@Controller('misc')
+@Controller(miscPrefix.main)
+@UseGuards(ThrottlerGuard)
 export class MiscController {
     constructor(
         private miscService:miscService
     ){}
 
-  @Get('allCat')
-  getCategories(): Promise<Categories[]>{
+  @Get(miscPrefix.allCat)
+  @HttpCode(200)
+  public getCategories(): Promise<Categories[]>{
     return this.miscService.findAllCat();
   }
 
-  @Get('allCond')
-  getConsditions():Promise<Conditions[]>{
+  @Get(miscPrefix.allCond)
+  @HttpCode(200)
+  public getConsditions():Promise<Conditions[]>{
     return this.miscService.findAllCond();
   }
 
-  @Get('allThreats')
-  getThreats():Promise<Threats[]>{
+  @Get(miscPrefix.allThreats)
+  @HttpCode(200)
+  public getThreats():Promise<Threats[]>{
     return this.miscService.findAllThreats();
   }
 
-  @Get('col/:table')
-  getColumnHeaders(@Param('table') table:string){
+  @Get(`${miscPrefix.col}/:table`)
+  @HttpCode(200)
+  public getColumnHeaders(@Param('table') table:string){
     return this.miscService.getColumnNames(table);
   }
 }

@@ -1,38 +1,48 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe, UseGuards, HttpCode } from '@nestjs/common';
 import { taskViewService } from 'src/Providers/task.provider';
 import { Task, taskView } from 'src/Entities/tasks';
 import { UpdateResult } from 'typeorm';
+import { SkipThrottle, ThrottlerGuard } from '@nestjs/throttler';
+
 @Controller('task')
+@UseGuards(ThrottlerGuard)
 export class TaskController {
     constructor(private readonly TaskService: taskViewService) {}
 
+    @SkipThrottle()
     @Get('all/:idAll')
-    findAll(@Param('idAll', ParseIntPipe) id: number):Promise<taskView[]>{
+    @HttpCode(200)
+    public findAll(@Param('idAll', ParseIntPipe) id: number):Promise<taskView[]>{
       return this.TaskService.getAllfromUID(id);
     }
-  
+    
     @Get(':idOne')
-    findOne(@Param('idOne', ParseIntPipe) id: number): Promise<taskView> {
+    @HttpCode(200)
+    public findOne(@Param('idOne', ParseIntPipe) id: number): Promise<taskView> {
       return this.TaskService.getOneFromID(id);
     }
   
     @Post()
-    create(@Body() taskData: Partial<Task>){
+    @HttpCode(201)
+    public create(@Body() taskData: Partial<Task>){
       this.TaskService.createOne(taskData)
     }
   
     @Put(':id')
-    update(@Param('id', ParseIntPipe) id: number, @Body() userData: Partial<Task>): Promise<Task> {
+    @HttpCode(204)
+    public update(@Param('id', ParseIntPipe) id: number, @Body() userData: Partial<Task>): Promise<Task> {
       return this.TaskService.update(id, userData);
     }
 
     @Put('finish/:id')
-    finishTask(@Param('id', ParseIntPipe) id: number):Promise<UpdateResult>{
+    @HttpCode(204)
+    public finishTask(@Param('id', ParseIntPipe) id: number):Promise<UpdateResult>{
       return this.TaskService.finishTask(id);
     }
   
     @Delete(':id')
-    remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    @HttpCode(204)
+    public remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
       return this.TaskService.remove(id);
     }
 }

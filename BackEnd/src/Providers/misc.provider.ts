@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
@@ -6,9 +6,13 @@ import { Task } from "src/Entities/tasks";
 import { Categories } from "src/Entities/categories";
 import { Conditions } from "src/Entities/conditions";
 import { Threats } from 'src/Entities/threats';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class miscService{
+    private logger:Logger = new Logger(miscService.name,{timestamp:true})
+
     constructor(
         @InjectRepository(Categories)
         private CatRepository: Repository<Categories>,
@@ -20,22 +24,32 @@ export class miscService{
         private TaskRepositoy:Repository<Task>,
 
         @InjectRepository(Threats)
-        private Threatrepository:Repository<Threats>
+        private Threatrepository:Repository<Threats>,
+
+        @Inject(CACHE_MANAGER) 
+        private cacheManager:Cache
     ) {}
 
     public async findAllCat(): Promise<Categories[]> {
-        return await this.CatRepository.find();
+        this.logger.log('Categories Requested');
+        const res:Categories[] = await this.CatRepository.find();
+        return await this.cacheManager.get('allCat') ?? res;
     }
 
     public async findAllCond(): Promise<Conditions[]> {
-        return await this.CondRepository.find();
+        this.logger.log('Conditions Requested');
+        const res:Conditions[] = await this.CondRepository.find();
+        return await this.cacheManager.get('allCond') ?? res;
     }
 
-    public async findAllThreats(){
-        return await this.Threatrepository.find();
+    public async findAllThreats():Promise<Threats[]>{
+        this.logger.log('Threat Levels Requested');
+        const res:Threats[] = await this.Threatrepository.find();
+        return await this.cacheManager.get('allThreats') ?? res;
     }
 
     async getColumnNames(tableName: string): Promise<string[]> {
+        this.logger.log('Task Column Names Requested');
         const queryBuilder = this.TaskRepositoy.createQueryBuilder();
         const rawData = await queryBuilder.connection.query(`
           SELECT column_name
