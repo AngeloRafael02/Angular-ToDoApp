@@ -21,6 +21,7 @@ import { TaskController } from './Controllers/task/task.controller';
 import { UserController } from './Controllers/user/user.controller';
 import { DatabaseModule } from './database.module';
 import { cachingService } from './Providers/caching.provider';
+import { task_logs } from './Entities/tasks_trigger';
 
 @Module({
   imports: [
@@ -32,7 +33,8 @@ import { cachingService } from './Providers/caching.provider';
       Categories,
       Task,
       taskView,
-      Threats
+      Threats,
+      task_logs
     ]),
     ThrottlerModule.forRoot({
       throttlers: [
