@@ -1,8 +1,11 @@
 export enum StatusCodes {
-  NotFound = 404,
   Success = 200,
   Accepted = 202,
-  BadRequest = 400
+  NoContent = 204,
+  BadRequest = 400,
+  NotFound = 404,
+  TooManyRequest = 429,
+  ServerError = 500
 }
 
 export enum miscPrefix {
@@ -10,6 +13,6 @@ export enum miscPrefix {
     allCat = 'allCat',
     allCond = 'allCond',
     allThreats = 'allThreats',
-    col = 'cool'
+    col = 'col'
 }
 
