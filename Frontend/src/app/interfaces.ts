@@ -1,4 +1,7 @@
 export interface dialogDataInterface{
+    allCat:categoriesInterface[]
+    allCond:conditionInterface[],
+    allThr:threatInterface[],
     option:string,
     ID:number
 }

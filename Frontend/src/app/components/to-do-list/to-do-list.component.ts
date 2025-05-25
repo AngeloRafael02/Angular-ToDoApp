@@ -1,4 +1,4 @@
-import {  Component, OnInit, ViewChild } from '@angular/core';
+import {  Component, Input, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -8,7 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { ToDoFormComponent } from '../to-do-form/to-do-form.component';
 import { PostgresService } from '../../services/postgres.service';
 import { MiscService } from '../../services/misc.service';
-import { taskViewInterface } from '../../interfaces';
+import { categoriesInterface, conditionInterface, dialogDataInterface, taskViewInterface, threatInterface } from '../../interfaces';
 import { LoadingService } from '../../services/loading.service';
 
 @Component({
@@ -34,7 +34,9 @@ export class ToDoListComponent implements OnInit{
   public taskFormDialogRef:MatDialogRef<ToDoFormComponent>
   public taskColumns:string[] = [];
   public dataSource:MatTableDataSource<taskViewInterface, MatPaginator>;
-
+  @Input() public taskCategories:categoriesInterface[] = [];
+  @Input() public taskConditions:conditionInterface[] = [];
+  @Input() public taskThreatLevels:threatInterface[] = [];
 
   ngOnInit(): void {
     try {
@@ -55,7 +57,13 @@ export class ToDoListComponent implements OnInit{
 
   public updateTask(task:number){
     this.taskFormDialogRef = this.matDialog.open(ToDoFormComponent, {
-      data: { option:'update', ID:task },
+      data: <dialogDataInterface>{ 
+        allCat:this.taskCategories,
+        allCond:this.taskConditions,
+        allThr:this.taskThreatLevels,
+        option:'new', 
+        ID:0 
+      },
       disableClose: false
     });
   }

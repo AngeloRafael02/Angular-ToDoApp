@@ -93,14 +93,14 @@ export class ToDoFormComponent implements OnInit{
 
     @Inject(MAT_DIALOG_DATA) public data:dialogDataInterface,
   ){
+    this.taskCategories = data.allCat,
+    this.taskConditions = data.allCond,
+    this.taskThreatLevels = data.allThr,
     this.mode = data.option;
     this.taskID = data.ID;
   }
 
   ngOnInit(): void {
-    this.psql.getAllCategories().subscribe(data => this.taskCategories = data);
-    this.psql.getAllConditions().subscribe(data => this.taskConditions = data);
-    this.psql.getAllThreats().subscribe(data => this.taskThreatLevels = data);
     this.taskForm = this.fb.group({ 
       title:["", [Validators.required, Validators.maxLength(50)]],
       note:["",Validators.maxLength(255)],
