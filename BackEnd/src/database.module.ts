@@ -31,7 +31,7 @@ import { DataSource, DataSourceOptions } from 'typeorm';
             password: configService.get<string>('PASSWORD'),
             database: configService.get<string>('DB'),
             entities: [__dirname + '/Entities/*{.ts,.js}'],
-            synchronize: false,
+            synchronize: true,
             logging:true,
           };
           const primaryDataSource = await createDataSource(primaryConfig); //used to check if connection works, error here is catched
