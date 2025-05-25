@@ -5,7 +5,9 @@ import {
     ViewEntity,
     PrimaryColumn,
     ViewColumn,
-    DataSource
+    DataSource,
+    ManyToOne,
+    JoinColumn
 } from "typeorm";
 import { Categories } from "./categories";
 import { Conditions } from "./conditions";
@@ -23,17 +25,27 @@ export class Task{
     @Column({ type:'varchar', length:255, nullable:true })
     note?:string
 
-    //@ManyToOne(() => Categories, (category) => category.id) 
+    @ManyToOne(() => Categories, (category) => category.cat) 
+    @JoinColumn({name:'cat_id'})
+    category:Categories;
+
     @Column({ type: 'int', nullable:false, default:1 })
     cat_id:number;
 
     @Column({ type:'int', nullable: true })
     prio?:number
     
+    @ManyToOne(()=> Threats, (threats) => threats.level)
+    @JoinColumn({name:'threat_id'})
+    threat:Threats;
+    
     @Column({ type:'int', default:1, nullable:true })
     threat_id?:number;
 
-    //@ManyToOne(() => Conditions, (conditions) => conditions.id) // Define foreign key relationship
+    @ManyToOne(() => Conditions, (conditions) => conditions.stat) // Define foreign key relationship
+    @JoinColumn({name:'stat_id'})
+    status:Conditions
+
     @Column({ type: 'int', default: 1, nullable:true })
     stat_id?:number;
 
@@ -46,7 +58,10 @@ export class Task{
     @Column({ type:'timestamp without time zone', nullable:true })
     deadline?:Date
 
-    //@ManyToOne(() => User, (user) => user.id) // Define foreign key relationship
+    @ManyToOne(() => User, (user) => user.id) // Define foreign key relationship
+    @JoinColumn({name:'owner_id'})
+    user:User
+    
     @Column({ type: 'int', nullable: false }) // Keep the owner_id in database
     owner_id: number;
 };
