@@ -32,20 +32,17 @@ export class miscService{
 
     public async findAllCat(): Promise<Categories[]> {
         this.logger.log('Categories Requested');
-        const res:Categories[] = await this.CatRepository.find();
-        return await this.cacheManager.get('allCat') ?? res;
+        return await this.cacheManager.get<Categories[]>('allCat') ?? await this.CatRepository.find();
     }
 
     public async findAllCond(): Promise<Conditions[]> {
         this.logger.log('Conditions Requested');
-        const res:Conditions[] = await this.CondRepository.find();
-        return await this.cacheManager.get('allCond') ?? res;
+        return await this.cacheManager.get('allCond') ?? await this.CondRepository.find();
     }
 
     public async findAllThreats():Promise<Threats[]>{
         this.logger.log('Threat Levels Requested');
-        const res:Threats[] = await this.Threatrepository.find();
-        return await this.cacheManager.get('allThreats') ?? res;
+        return await this.cacheManager.get('allThreats') ?? await this.Threatrepository.find();
     }
 
     async getColumnNames(tableName: string): Promise<string[]> {
