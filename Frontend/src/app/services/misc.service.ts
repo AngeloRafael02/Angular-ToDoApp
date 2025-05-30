@@ -1,11 +1,14 @@
 import { Injectable } from '@angular/core';
-
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
 export class MiscService {
 
-  constructor() { }
+  constructor(
+    private http:HttpClient
+  ) { }
 
   public insertArrayAtIndex(mainArray:string[], insertArray:string[], index:number):string[] {
     if (index < 0 || index > mainArray.length) {
@@ -24,5 +27,10 @@ export class MiscService {
       return value.toDateString();
     }
     return "1970-01-01";
+  }
+
+  public getFileContent(filePath: string): Observable<string> {
+    // The filePath should be relative to the assets folder or a full URL
+    return this.http.get(filePath, { responseType: 'text' });
   }
 }

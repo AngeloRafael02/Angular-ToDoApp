@@ -3,8 +3,15 @@ import { Component, OnInit  } from '@angular/core';
 @Component({
   selector: 'app-clock',
   imports: [],
-  template: `<h3> Current Time: {{hour}}:{{minute}}:{{second}} {{ampm}}</h3>`,
-  styles: `h3{text-align:center; padding:20px 0px 20px 0px; color:white;}`
+  template: `
+  <div id="clockContainer">
+    <h3> Current Time: {{hour}}:{{minute}}:{{second}} {{ampm}}</h3>
+  </div>
+  `,
+  styles: `
+    h3{text-align:center; padding:20px 0px 20px 0px; color:white;}
+    #clockContainer{border:1px solid red;width:600px;}
+  `
 })
 export class ClockComponent implements OnInit  {
   private daysArray:string[] = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
