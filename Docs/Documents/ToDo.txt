@@ -29,5 +29,10 @@ FrontEnd
         alarming = red
         Inevitable = black
 > Add Alert to confim deletion of Task
-
+> About Component (uses ngx-markdown)
+    - reads Markdown from README.md and format it as HTML in Component
+> Summary Component (uses ngx-charts)
+    - how pie graph of tasks based category
+    - how pie graph of tasks based condition
+    - how pie graph of tasks based threatLevel
 ERRORS:
