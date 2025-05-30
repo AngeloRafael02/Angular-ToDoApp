@@ -4,6 +4,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
+import {MatSort, MatSortModule} from '@angular/material/sort';
+import { MatFormField, MatLabel  } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 import { ToDoFormComponent } from '../to-do-form/to-do-form.component';
 import { PostgresService } from '../../services/postgres.service';
@@ -17,7 +20,11 @@ import { LoadingService } from '../../services/loading.service';
     CommonModule,
     MatTableModule,
     MatPaginatorModule,
-    MatButtonModule
+    MatButtonModule,
+    MatSortModule,
+    MatFormField,
+    MatLabel,
+    MatInputModule
   ],
   templateUrl:'to-do-list.component.html',
   styleUrls:['to-do-list.component.scss']
@@ -30,13 +37,18 @@ export class ToDoListComponent implements OnInit{
     private psql:PostgresService,
     private misc:MiscService,
   ){}
-
-  public taskFormDialogRef:MatDialogRef<ToDoFormComponent>
-  public taskColumns:string[] = [];
-  public dataSource:MatTableDataSource<taskViewInterface, MatPaginator>;
+  
   @Input() public taskCategories:categoriesInterface[] = [];
   @Input() public taskConditions:conditionInterface[] = [];
   @Input() public taskThreatLevels:threatInterface[] = [];
+  
+  public taskFormDialogRef:MatDialogRef<ToDoFormComponent>
+  public taskColumns:string[] = [];
+  public dataSource:MatTableDataSource<taskViewInterface>;
+
+  @ViewChild(MatSort) sort: MatSort;
+
+
 
   ngOnInit(): void {
     try {
@@ -47,6 +59,7 @@ export class ToDoListComponent implements OnInit{
       });
       this.psql.getAllTaskByID(1).subscribe(data => {
         this.dataSource = new MatTableDataSource<taskViewInterface>(data);
+        this.dataSource.sort = this.sort;
       });
     } catch (error) {
       
@@ -61,11 +74,16 @@ export class ToDoListComponent implements OnInit{
         allCat:this.taskCategories,
         allCond:this.taskConditions,
         allThr:this.taskThreatLevels,
-        option:'new', 
-        ID:0 
+        option:'update', 
+        ID:task
       },
       disableClose: false
     });
+  }
+
+  public applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   public deleteTask(ID:number){

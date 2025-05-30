@@ -3,56 +3,29 @@ import { PostgresService } from '../../services/postgres.service';
 import { categoriesInterface, conditionInterface, dialogDataInterface, taskInterface, threatInterface } from '../../interfaces';
 import { ReactiveFormsModule, FormBuilder,Validators, FormGroup, FormControl} from "@angular/forms";
 import { CommonModule } from '@angular/common';
+import {provideNativeDateAdapter} from '@angular/material/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
+import { MatSelectModule } from '@angular/material/select';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatGridListModule } from '@angular/material/grid-list';
 
 @Component({
   selector: 'app-to-do-form',
-  providers:[PostgresService],
+  providers:[PostgresService,provideNativeDateAdapter()],
   imports: [
     MatButtonModule,
+    MatFormFieldModule, 
+    MatInputModule, 
+    MatSelectModule,
+    MatDatepickerModule,
+    MatGridListModule,
     ReactiveFormsModule, 
     CommonModule,
   ],
-  template:`
-  <div id="formBox">
-    <h2 mat-dialog-title>Task</h2>
-    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
-      <div mat-dialog-content>
-        <label for="title">Title: </label>
-        <input type="text"  id="title" formControlName="title">
-        <br><br>
-        <label for="note">Note: </label>
-        <textarea id="note" formControlName="note"></textarea>
-        <br><br>
-        <label for="category">Category: </label>
-        <select id="category" formControlName="cat_id">
-          <option *ngFor="let category of taskCategories" value={{category.id}}>{{category.cat}}</option>
-        </select>
-        <br><br>
-        <label for="prio">Priority: </label>
-        <input type="number" min="0" id="prio" formControlName="prio">
-        <br><br>
-        <label for="threat_level">Threat Level: </label>
-        <select id="threat_level" formControlName="threat_id">
-          <option *ngFor="let threat of taskThreatLevels" value="{{threat.id}}">{{threat.level}}</option>
-        </select>
-        <br><br>
-        <label for="status">Status: </label>
-        <select id="status" formControlName="stat_id">
-          <option *ngFor="let status of taskConditions" value="{{status.id}}">{{status.stat}}</option>
-        </select>
-        <br><br>
-        <label for="deadline">Deadline:</label>
-        <input type="date" id="deadline" formControlName="deadline" value="{{this.DeadlineStrValue}}">  
-        <br><br>
-      </div>
-      <div mat-dialog-actions align="left">
-        <button mat-flat-button class="modalBTN" type="submit">Submit</button>
-      </div>
-    </form>
-  </div>
-  `,
+  templateUrl:'to-do-form.component.html',
   styles:`
     @use '../../../styles.scss' as c ;
     #note{ resize:none; }

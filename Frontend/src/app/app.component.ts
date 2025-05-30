@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { MatDialog,MatDialogRef } from "@angular/material/dialog";
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { ClockComponent } from './components/clock/clock.component';
 import { ToDoFormComponent } from './components/to-do-form/to-do-form.component';
@@ -13,7 +15,10 @@ import { PostgresService } from './services/postgres.service';
 @Component({
   selector: 'app-root',
   imports: [
+    RouterModule,
     MatButtonModule, 
+    MatButtonToggleModule,
+    MatTabsModule,
     ToDoListComponent,
     ClockComponent,
     MatGridListModule

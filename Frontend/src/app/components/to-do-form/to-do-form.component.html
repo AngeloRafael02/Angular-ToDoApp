@@ -1,0 +1,65 @@
+<div id="formBox">
+    <h2 mat-dialog-title>Task</h2>
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+    <div mat-dialog-content>
+        <mat-grid-list cols="2" rowHeight="100px">
+            <mat-grid-tile colspan="1">
+                <mat-form-field>
+                    <mat-label>Task</mat-label>
+                    <input matInput id="title" formControlName="title">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="1">
+                <mat-form-field>
+                    <mat-label>Textarea</mat-label>
+                    <textarea matInput id="note" formControlName="note"></textarea>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="1">
+                <mat-form-field>
+                    <mat-label>Category</mat-label>
+                    <mat-select formControlName="cat_id">
+                        <mat-option *ngFor="let category of taskCategories" value={{category.id}}>{{category.cat}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="1">
+                <mat-form-field>
+                    <mat-label>Priority</mat-label>
+                    <input matInput type="number" min="0" id="prio" placeholder="Enter a number" formControlName="prio">
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="1">
+                <mat-form-field>
+                    <mat-label>Threat</mat-label>
+                    <mat-select formControlName="threat_id">
+                        <mat-option *ngFor="let threat of taskThreatLevels" value="{{threat.id}}">{{threat.level}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="1">
+                <mat-form-field>
+                    <mat-label>Status</mat-label>
+                    <mat-select formControlName="stat_id">
+                        <mat-option *ngFor="let status of taskConditions" value="{{status.id}}">{{status.stat}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="1">
+                <mat-form-field>
+                    <mat-label>Deadline</mat-label>
+                    <input matInput [matDatepicker]="picker3" id="deadline" formControlName="deadline" value="{{this.DeadlineStrValue}}">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="1">
+                <div mat-dialog-actions align="left">
+                    <button mat-flat-button class="modalBTN" type="submit">Submit</button>
+                </div>
+            </mat-grid-tile>
+        </mat-grid-list>
+    </div>
+    </form>
+</div>

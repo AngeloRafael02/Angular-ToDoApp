@@ -21,7 +21,9 @@ table,th,td   {
     }
 }
 
-
+.footerRow{
+  @include c.buttonColors;
+}
 
 .optionBTN { 
     @include c.buttonColors;

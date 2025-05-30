@@ -1,11 +1,18 @@
 
-
 <mat-grid-list cols="12" rowHeight="100px">
-  <mat-grid-tile colspan="3"> <div></div>
+  <mat-grid-tile colspan="3"> 
+    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="appNav" value="about">
+      <mat-button-toggle routerLink="about" class="buttonBase" value="about" mat-flat-button >About</mat-button-toggle>
+      <mat-button-toggle routerLink="summary" class="buttonBase" value="summary" mat-flat-button >Summary</mat-button-toggle>
+    </mat-button-toggle-group>
   </mat-grid-tile>
-  <mat-grid-tile colspan="6"> <div><app-clock></app-clock></div>
+  <mat-grid-tile colspan="6"></mat-grid-tile>
+  <mat-grid-tile colspan="3"></mat-grid-tile>
+  <mat-grid-tile colspan="6" rowHeight="00px">
+    <router-outlet />
   </mat-grid-tile>
-  <mat-grid-tile colspan="3"> <div></div>
+  <mat-grid-tile colspan="6"> 
+    <app-clock></app-clock>
   </mat-grid-tile>
   <mat-grid-tile colspan="3"> 
     <div>
