@@ -10,7 +10,6 @@ import { Component, OnInit  } from '@angular/core';
   `,
   styles: `
     h3{text-align:center; padding:20px 0px 20px 0px; color:white;}
-    #clockContainer{border:1px solid red;width:600px;}
   `
 })
 export class ClockComponent implements OnInit  {
