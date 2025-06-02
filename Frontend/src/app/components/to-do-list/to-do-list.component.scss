@@ -1,5 +1,18 @@
 @use '../../../styles.scss' as c;
 @use '../../app.component.scss' as app;
+@use '@angular/material' as mat;
+
+
+mat-paginator{
+  @include mat.paginator-overrides((
+    container-text-color: white,
+    container-background-color: c.$color1,
+    disabled-icon-color: grey,
+    enabled-icon-color: c.$color4,
+  ));
+
+}
+
 
 table,th,td   {
     border: 1px solid black;
@@ -17,7 +30,12 @@ table,th,td   {
       @include c.buttonColors;
     }
     td{
-        border: 1px solid black;
+      border: 1px solid black;
+      button{
+        @include c.buttonColors;
+        width: 50px; 
+        margin-left:5px;
+      }
     }
 }
 
@@ -25,10 +43,8 @@ table,th,td   {
   @include c.buttonColors;
 }
 
-.optionBTN { 
-    @include c.buttonColors;
-    width: 50px; 
-    margin-left:5px;
+.tableContainer{
+  margin-top: 20px;
 }
 
 .greenCell,.greenRow { background-color: lightgreen; }

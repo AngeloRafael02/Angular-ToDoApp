@@ -6,20 +6,12 @@
       <mat-button-toggle routerLink="summary" class="buttonBase" value="summary" mat-flat-button >Summary</mat-button-toggle>
     </mat-button-toggle-group>
   </mat-grid-tile>
-  <mat-grid-tile colspan="6"></mat-grid-tile>
-  <mat-grid-tile colspan="3"></mat-grid-tile>
+  <mat-grid-tile colspan="9"></mat-grid-tile>
   <mat-grid-tile colspan="6" rowHeight="00px">
     <router-outlet />
   </mat-grid-tile>
   <mat-grid-tile colspan="6"> 
     <app-clock></app-clock>
-  </mat-grid-tile>
-  <mat-grid-tile colspan="3"> 
-    <div>
-        <button mat-flat-button color="primary" type="button" (click)="OpenModal()" id="newTaskBTN">New Task</button>
-    </div>
-  </mat-grid-tile>
-  <mat-grid-tile colspan="9"> <div></div>
   </mat-grid-tile>
 </mat-grid-list>
 <div id="list">

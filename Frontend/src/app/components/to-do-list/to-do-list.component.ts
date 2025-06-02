@@ -36,7 +36,17 @@ export class ToDoListComponent implements OnInit{
     private loadingService:LoadingService,
     private psql:PostgresService,
     private misc:MiscService,
-  ){}
+  ){
+    this.psql.getColumnHeaders('task_view').subscribe(data => {
+        this.taskColumns = data;
+        this.taskColumns = this.misc.insertArrayAtIndex(this.taskColumns,["Options"],10)
+      });
+      this.psql.getAllTaskByID(1).subscribe(data => {
+        this.dataSource = new MatTableDataSource<taskViewInterface>(data);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      });
+  }
   
   @Input() public taskCategories:categoriesInterface[] = [];
   @Input() public taskConditions:conditionInterface[] = [];
@@ -47,20 +57,12 @@ export class ToDoListComponent implements OnInit{
   public dataSource:MatTableDataSource<taskViewInterface>;
 
   @ViewChild(MatSort) sort: MatSort;
-
-
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit(): void {
     try {
       this.loadingService.loadingOn();
-      this.psql.getColumnHeaders('task_view').subscribe(data => {
-        this.taskColumns = data;
-        this.taskColumns = this.misc.insertArrayAtIndex(this.taskColumns,["Options"],10)
-      });
-      this.psql.getAllTaskByID(1).subscribe(data => {
-        this.dataSource = new MatTableDataSource<taskViewInterface>(data);
-        this.dataSource.sort = this.sort;
-      });
+      
     } catch (error) {
       
     } finally {
@@ -169,4 +171,25 @@ export class ToDoListComponent implements OnInit{
     }
   }
 
+    newTaskModal() {
+    this.taskFormDialogRef = this.matDialog.open(ToDoFormComponent, {
+      data: <dialogDataInterface>{ 
+        allCat:this.taskCategories,
+        allCond:this.taskConditions,
+        allThr:this.taskThreatLevels,
+        option:'new', 
+        ID:0 
+      },
+      disableClose: false
+    });
+
+    this.taskFormDialogRef.afterClosed().subscribe(res => {
+      if ((res == true)) {
+      }
+    });
+  }
+
+  closaTaskModal(){
+    this.taskFormDialogRef.close(false)
+  }
 }
