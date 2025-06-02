@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MarkdownModule } from 'ngx-markdown';
 import { MiscService } from '../../services/misc.service';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser'; 
 
 @Component({
   selector: 'app-about',
@@ -9,13 +8,24 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
     MarkdownModule
   ], 
   template: `
-  <div id="aboutContainer">
-    <p>{{FileContent}}asd</p>
+  <div id="aboutContainer" style="overflow-y:scroll;">
+  <p>
+  <markdown  class="variable-binding" [data]="FileContent"></markdown>
+
+  </p>     
   </div>
+
+
   `,
   styles: `
     h2,p{color:white;}
-    #aboutContainer{padding-left:30px; border: 1px solid red; width:600px;}
+    #aboutContainer{
+      padding-left:30px;
+      height: 100%; /* Make it fill the tile's height */
+      overflow-y: auto; /* Enable vertical scrolling */
+      /* You might also want to add padding or other styling */
+      box-sizing: border-box;
+    }
   `
 })
 export class AboutComponent implements OnInit {
@@ -24,25 +34,15 @@ export class AboutComponent implements OnInit {
     private misc:MiscService
   ){}
   public FileContent:string = '';
-  public markdown:string = `## Markdown __rulez__!
----
-### Lists
-1. Ordered list
-2. Another bullet point
-   - Unordered list
-   - Another unordered bullet
-
-### Blockquote
-> Blockquote to the max`;
 
   ngOnInit(): void {
-    this.misc.getFileContent('/src/assets/README.md').subscribe({
+    this.misc.getFileContent('/assets/About.md').subscribe({
       next: (content: string) => {
         this.FileContent = content;
-        console.log('Server file content:', this.FileContent);
+        //console.log('Server file content:', this.FileContent);
       },
       error: (err) => {
-        console.error('Error reading server file:', err);
+        //console.error('Error reading server file:', err);
       }
     });
   }

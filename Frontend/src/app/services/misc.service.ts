@@ -30,7 +30,6 @@ export class MiscService {
   }
 
   public getFileContent(filePath: string): Observable<string> {
-    // The filePath should be relative to the assets folder or a full URL
     return this.http.get(filePath, { responseType: 'text' });
   }
 }
