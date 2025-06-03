@@ -4,7 +4,7 @@ import { categoriesInterface, conditionInterface, dialogDataInterface, taskInter
 import { ReactiveFormsModule, FormBuilder,Validators, FormGroup, FormControl} from "@angular/forms";
 import { CommonModule } from '@angular/common';
 import {provideNativeDateAdapter} from '@angular/material/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -39,9 +39,12 @@ import { MatGridListModule } from '@angular/material/grid-list';
 })
 export class ToDoFormComponent implements OnInit{
   
+ selected = 'option2';
+test = "1";
   public mode:string = '';
   public taskID:number = 0;
   public DeadlineStrValue:string ='';
+
 
   public taskForm:FormGroup = new FormGroup({
       id: new FormControl<number | null>(null), 
@@ -63,6 +66,7 @@ export class ToDoFormComponent implements OnInit{
   constructor(
     private fb: FormBuilder,
     private psql:PostgresService,
+    public taskFormDialogRef:MatDialogRef<ToDoFormComponent>,
 
     @Inject(MAT_DIALOG_DATA) public data:dialogDataInterface,
   ){
@@ -72,6 +76,7 @@ export class ToDoFormComponent implements OnInit{
     this.mode = data.option;
     this.taskID = data.ID;
   }
+  
 
   ngOnInit(): void {
     this.taskForm = this.fb.group({ 
@@ -86,9 +91,10 @@ export class ToDoFormComponent implements OnInit{
       deadline:[''],
       owner_id:[1]
     });
+    
     if (this.mode == 'update'){
       this.psql.getOneTaskByID(this.taskID).subscribe(data => {
-        this.taskForm.setValue({
+        this.taskForm.patchValue({
           title:data.Title,
           note:data.Description,
           cat_id:data.CID,
@@ -101,9 +107,10 @@ export class ToDoFormComponent implements OnInit{
           owner_id:data.UID
         });
         this.DeadlineStrValue = data.Deadline.toString().slice(0,10); //workaround for deadline value not appearing in <input>
+      //this.taskForm = new FormGroup({
+      //  cat_id: new FormControl(1)
+      //})
       });
-    } else if (this.mode == 'new'){
-      this.taskForm.get('stat_id')?.disable();
     }
   }
 
@@ -127,9 +134,12 @@ export class ToDoFormComponent implements OnInit{
         console.log(this.taskForm.value);
         this.psql.addTask(this.taskForm.value);
       } else if (this.mode == 'update'){ //mode = update
-        alert("not new");
         this.psql.updateOneTask(this.taskForm.value, this.taskID);
       }
+      this.taskFormDialogRef.close()
+      setTimeout(function() {
+        location.reload();
+      }, 1000);
     } else {
       console.log("Form is invalid");
     }
