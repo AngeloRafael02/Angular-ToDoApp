@@ -68,7 +68,7 @@ export class miscService{
             END
         `,[tableName]);
         return rawData.map((row) => row.column_name);
-      }
+    }
 }
 
 
