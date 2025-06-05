@@ -27,6 +27,7 @@ import { PostgresService } from './services/postgres.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit{
+  private idleCallbackId: number | undefined;
   public matDialogRef: MatDialogRef<ToDoFormComponent>;
   public taskCategories:categoriesInterface[] = [];
   public taskConditions:conditionInterface[] = [];
@@ -39,6 +40,21 @@ export class AppComponent implements OnInit{
   ) {}
 
   ngOnInit(): void {
+    if ('requestIdleCallback' in window) {
+      this.idleCallbackId = window.requestIdleCallback((deadline) => {
+        console.log('used requestIdleCallback()')
+        this.processAllIdleTasks(); 
+      }, { timeout: 1000 })
+    } else {
+      console.warn('requestIdleCallback is not supported. Using setTimeout as fallback.');
+      setTimeout(() => {
+        this.processAllIdleTasks(); // A hypothetical method to do all work at once
+      }, 0);
+    }
+
+  }
+
+  private processAllIdleTasks(){
     this.psql.getAllCategories().subscribe(data => this.taskCategories = data);
     this.psql.getAllConditions().subscribe(data => this.taskConditions = data);
     this.psql.getAllThreats().subscribe(data => this.taskThreatLevels = data);
