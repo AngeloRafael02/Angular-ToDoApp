@@ -1,6 +1,6 @@
 import { Injectable,Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, UpdateResult } from 'typeorm';
+import { In, Not, Repository, UpdateResult } from 'typeorm';
 
 import { Task,taskView } from "src/Entities/tasks";
 import { Categories } from "src/Entities/categories";
@@ -37,7 +37,7 @@ export class taskViewService{
         return await this.taskViewRep.find({
             where:{
                 UID:id,
-                Status:'Unfinished'
+                Status:Not(In(['Finished','Cancelled'])),
             }, order:{
                 Deadline:'ASC'
             }
