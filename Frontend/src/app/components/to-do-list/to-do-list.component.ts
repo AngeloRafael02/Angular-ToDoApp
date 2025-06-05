@@ -4,7 +4,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
-import {MatSort, MatSortModule} from '@angular/material/sort';
+import { MatSort, MatSortModule} from '@angular/material/sort';
 import { MatFormField, MatLabel  } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
@@ -13,6 +13,7 @@ import { PostgresService } from '../../services/postgres.service';
 import { MiscService } from '../../services/misc.service';
 import { categoriesInterface, conditionInterface, dialogDataInterface, taskViewInterface, threatInterface } from '../../interfaces';
 import { LoadingService } from '../../services/loading.service';
+import { AlertDialogData, AlertModalComponent } from '../alert-modal/alert-modal.component';
 
 @Component({
   selector: 'app-to-do-list',
@@ -79,7 +80,9 @@ export class ToDoListComponent implements OnInit{
         option:'update', 
         ID:task
       },
-      disableClose: false
+      disableClose: false,
+      enterAnimationDuration:'250ms',
+      exitAnimationDuration:'125ms'
     });
   }
 
@@ -89,11 +92,33 @@ export class ToDoListComponent implements OnInit{
   }
 
   public deleteTask(ID:number){
-    this.psql.deleteOneTask(ID);
+    const dialogData:AlertDialogData= {
+      message: 'Do you want to proceed with this action?',
+      showYesNoButtons: true
+    };
+    const dialogRef = this.matDialog.open(AlertModalComponent, {
+      width: '350px',
+      data: dialogData,
+      enterAnimationDuration:'250ms',
+      exitAnimationDuration:'125ms'
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The Yes/No dialog was closed with result:', result);
+      if (result) {
+        console.log('User clicked Yes');
+        this.psql.deleteOneTask(ID);
+      } else {
+        console.log('User clicked No');
+        // Perform action for No
+      }
+    });
   }
 
   public finishTask(ID:number){
     this.psql.finishOneTask(ID);
+    setTimeout(function() {
+      location.reload();
+    }, 1000);
   }
 
   public deadlineFormatHelper(deadline:string):string{
@@ -180,7 +205,9 @@ export class ToDoListComponent implements OnInit{
         option:'new', 
         ID:0 
       },
-      disableClose: false
+      disableClose: false,
+      enterAnimationDuration:'250ms',
+      exitAnimationDuration:'125ms'
     });
 
     this.taskFormDialogRef.afterClosed().subscribe(res => {

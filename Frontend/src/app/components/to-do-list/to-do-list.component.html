@@ -107,10 +107,10 @@
         <td mat-footer-cell *matFooterCellDef class="footerRow"> CID </td>
       </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="taskColumns; sticky: true"></tr>
+      <tr mat-header-row *matHeaderRowDef="taskColumns; sticky: true "></tr>
       <tr mat-row *matRowDef="let row; columns: taskColumns;" [ngClass]="evaluateDate(row)"></tr>
-      <tr mat-footer-row *matFooterRowDef="taskColumns; sticky: true"></tr>
-    
+      <!--<tr mat-footer-row *matFooterRowDef="taskColumns; sticky: true"></tr>
+      -->
       <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell" colspan="8">No data matching the filter "{{input.value}}"</td>
       </tr>

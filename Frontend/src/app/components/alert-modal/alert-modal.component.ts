@@ -17,21 +17,32 @@ export interface AlertDialogData {
     MatButtonModule
   ],
   template: `
-  <h2 mat-dialog-title>Alert</h2>
-  <div mat-dialog-content>
-    <p>{{ data.message }}</p>
+  <div id="alertBox">
+    <h2 mat-dialog-title>Alert</h2>
+    <div mat-dialog-content>
+      <p>{{ data.message }}</p>
+    </div>
+    <div mat-dialog-actions align="right">
+      <ng-container *ngIf="data.showYesNoButtons; else okButton">
+        <button mat-button (click)="onNoClick()" class="modalBTN">No</button>
+        <button mat-button cdkFocusInitial (click)="onYesClick()" class="modalBTN">Yes</button>
+      </ng-container>
+      <ng-template #okButton>
+        <button mat-button cdkFocusInitial (click)="onOkClick()" class="modalBTN">OK</button>
+      </ng-template>
+    </div>
   </div>
-  <div mat-dialog-actions align="end">
-    <ng-container *ngIf="data.showYesNoButtons; else okButton">
-      <button mat-button (click)="onNoClick()">No</button>
-      <button mat-button cdkFocusInitial (click)="onYesClick()">Yes</button>
-    </ng-container>
-    <ng-template #okButton>
-      <button mat-button cdkFocusInitial (click)="onOkClick()">OK</button>
-    </ng-template>
-  </div>
+
   `,
-  styles: ``
+  styles: `
+    @use '../../../styles.scss' as c ;
+    #alertBox { width:auto;padding: 15px 20px 15px 20px; }
+    .modalBTN{ 
+      @include c.buttonColors;
+      margin-left:1%; 
+      margin-bottom:1%; 
+    }
+  `
 })
 export class AlertModalComponent {
   constructor(
