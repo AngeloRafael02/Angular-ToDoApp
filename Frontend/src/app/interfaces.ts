@@ -17,6 +17,10 @@ export interface threatInterface {
     id:number
     level:string
 }
+export interface chartDataInterface{
+    name:string
+    value:number
+}
 export interface taskInterface {
     id?:number
     title:string

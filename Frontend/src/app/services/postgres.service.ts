@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
-import { categoriesInterface, conditionInterface, taskInterface, taskViewInterface, threatInterface } from '../interfaces';
+import { categoriesInterface, chartDataInterface, conditionInterface, taskInterface, taskViewInterface, threatInterface } from '../interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +37,16 @@ export class PostgresService {
 
   public getColumnHeaders(table:string):Observable<string[]>{
     return this.http.get<string[]>(`${this.nestJS}/misc/col/${table}`);
+  }
+
+  public getTaskGroupedByCategories(uid:number):Observable<chartDataInterface[]>{
+    return this.http.get<chartDataInterface[]>(`${this.nestJS}/misc/catGrouped/${uid}`);
+  }
+  public getTaskGroupedByStatus(uid:number):Observable<chartDataInterface[]>{
+    return this.http.get<chartDataInterface[]>(`${this.nestJS}/misc/statGrouped/${uid}`);
+  }
+  public getTaskGroupedByThreatLevel(uid:number):Observable<chartDataInterface[]>{
+    return this.http.get<chartDataInterface[]>(`${this.nestJS}/misc/threatGrouped/${uid}`);
   }
 
   public addTask(taskObj:taskInterface):Subscription{
