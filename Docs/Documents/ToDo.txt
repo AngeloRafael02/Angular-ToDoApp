@@ -1,12 +1,12 @@
 BackEnd
 > Create a Database Service to connect to cloud DB if 
-    Local DB does not connect successfully
+    Local DB does not connect successfully - DONE
 > Modfy Query -  Order by Deadline - DONE
 > Task Query pagination
 
 FrontEnd
 > Implement Color Pallete - DONE
-    - #35374B
+    - #35374B - CHANGED TO #404258
     - #344955
     - #50727B
     - #78A083
@@ -28,14 +28,14 @@ FrontEnd
         High = orage
         alarming = red
         Inevitable = black
-> Add Alert to confim deletion of Task
-> About Component (uses ngx-markdown)
+> Add Alert to confim deletion of Task - DONE
+> About Component (uses ngx-markdown) - DONE
     - reads Markdown from README.md and format it as HTML in Component
-> Summary Component (uses ngx-charts)
+> Summary Component (uses ngx-charts) - DONE
     - how pie graph of tasks based category
     - how pie graph of tasks based condition
     - how pie graph of tasks based threatLevel
+> Clicking to a chart's Slice will filter out the todolist
 ERRORS:
     - Category, Status, and Threat Values on Update do not appear - FIXED
     - Loading Modules do not work
-    - Reacess Color Pallet to cater to the unchangable pagination number's color
