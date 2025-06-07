@@ -1,19 +1,21 @@
-
-<mat-grid-list cols="12" rowHeight="100px">
+<div class="topArea">
+<mat-grid-list cols="12" rowHeight="75px">
   <mat-grid-tile colspan="3"> 
     <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="appNav" value="about">
       <mat-button-toggle routerLink="about" class="buttonBase" value="about" mat-flat-button >About</mat-button-toggle>
       <mat-button-toggle routerLink="summary" class="buttonBase" value="summary" mat-flat-button >Summary</mat-button-toggle>
     </mat-button-toggle-group>
   </mat-grid-tile>
-  <mat-grid-tile colspan="9"></mat-grid-tile>
-  <mat-grid-tile colspan="6" rowHeight="00px">
-    <router-outlet />
-  </mat-grid-tile>
-  <mat-grid-tile colspan="6"> 
+  <mat-grid-tile colspan="9">
     <app-clock></app-clock>
   </mat-grid-tile>
 </mat-grid-list>
+</div>
+
+<mat-grid-list cols="12" rowHeight="200px">
+  <router-outlet />
+</mat-grid-list>
+
 <div id="list">
     <app-to-do-list [taskCategories]="taskCategories" [taskConditions]="taskConditions" [taskThreatLevels]="taskThreatLevels">
     </app-to-do-list>
