@@ -4,15 +4,14 @@
 
 
 mat-paginator{
+  border: 2px solid black;
   @include mat.paginator-overrides((
-    container-text-color: white,
-    container-background-color: c.$color1,
-    disabled-icon-color: grey,
+    container-text-color: black,
+    container-background-color: c.$color3,
+    disabled-icon-color: black,
     enabled-icon-color: c.$color4,
   ));
-
 }
-
 
 table,th,td   {
     border: 1px solid black;

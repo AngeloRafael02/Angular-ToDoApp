@@ -60,7 +60,7 @@ export class ToDoListComponent implements OnInit{
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  ngOnInit(): void {
+  ngOnInit():void {
     try {
       this.loadingService.loadingOn();
       
@@ -71,7 +71,7 @@ export class ToDoListComponent implements OnInit{
     }
   }
 
-  public updateTask(task:number){
+  public updateTask(task:number):void{
     this.taskFormDialogRef = this.matDialog.open(ToDoFormComponent, {
       data: <dialogDataInterface>{ 
         allCat:this.taskCategories,
@@ -86,12 +86,12 @@ export class ToDoListComponent implements OnInit{
     });
   }
 
-  public applyFilter(event: Event) {
+  public applyFilter(event: Event):void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  public deleteTask(ID:number){
+  public deleteTask(ID:number):void{
     const dialogData:AlertDialogData= {
       message: 'Do you want to proceed with this action?',
       showYesNoButtons: true
@@ -114,7 +114,7 @@ export class ToDoListComponent implements OnInit{
     });
   }
 
-  public finishTask(ID:number){
+  public finishTask(ID:number):void{
     this.psql.finishOneTask(ID);
     setTimeout(function() {
       location.reload();
@@ -196,7 +196,7 @@ export class ToDoListComponent implements OnInit{
     }
   }
 
-    newTaskModal() {
+  public newTaskModal():void {
     this.taskFormDialogRef = this.matDialog.open(ToDoFormComponent, {
       data: <dialogDataInterface>{ 
         allCat:this.taskCategories,
@@ -209,14 +209,20 @@ export class ToDoListComponent implements OnInit{
       enterAnimationDuration:'250ms',
       exitAnimationDuration:'125ms'
     });
-
     this.taskFormDialogRef.afterClosed().subscribe(res => {
       if ((res == true)) {
       }
     });
   }
 
-  closaTaskModal(){
+  public closaTaskModal():void{
     this.taskFormDialogRef.close(false)
+  }
+
+  public applyCategoryFilter(category: string):void {
+    this.dataSource.filter = category.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage(); // Go to the first page after filtering
+    }
   }
 }
