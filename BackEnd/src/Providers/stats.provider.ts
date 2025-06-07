@@ -19,12 +19,12 @@ export class statsService{
         private TaskRepository:Repository<Task>
     ){}
 
-    public async getCategoryGrouped(id:number):Promise<unknown[]>{
+    public async getCategoryGrouped(id:number):Promise<{name:string, value:number}[]>{
         const result = await this.TaskRepository
             .createQueryBuilder('t') 
             .innerJoin(Categories, 'c', 't.cat_id = c.id') 
-            .select('c.cat', 'Category') 
-            .addSelect('COUNT(t.cat_id)', 'Count') 
+            .select('c.cat', 'name') 
+            .addSelect('COUNT(t.cat_id)', 'value') 
             .where('t.stat_id NOT IN (:...statids)', { statids: [3, 4] }) 
             .andWhere('t.owner_id = :ownerId', { ownerId: id })
             .groupBy('t.cat_id') 
@@ -33,12 +33,12 @@ export class statsService{
         return result;
     }
 
-    public async getConditionGrouped(id:number){
+    public async getConditionGrouped(id:number):Promise<{name:string, value:number}[]>{
         const result = await this.TaskRepository
             .createQueryBuilder('t') 
             .innerJoin(Conditions, 'c', 't.stat_id = c.id') 
-            .select('c.stat', 'Status') 
-            .addSelect('COUNT(t.stat_id)', 'Count') 
+            .select('c.stat', 'name') 
+            .addSelect('COUNT(t.stat_id)', 'value') 
             .where('t.owner_id = :ownerId', { ownerId: id })
             .groupBy('t.stat_id') 
             .addGroupBy('c.stat') 
@@ -46,12 +46,12 @@ export class statsService{
         return result;
     }
 
-    public async getThreatLevelGrouped(id:number){
+    public async getThreatLevelGrouped(id:number):Promise<{name:string, value:number}[]>{
         const result = await this.TaskRepository
             .createQueryBuilder('t') 
             .innerJoin(Threats, 'c', 't.threat_id = c.id') 
-            .select('c.level', 'Threat Level') 
-            .addSelect('COUNT(t.threat_id)', 'Count') 
+            .select('c.level', 'name') 
+            .addSelect('COUNT(t.threat_id)', 'value') 
             .where('t.stat_id NOT IN (:...statids)', { statids: [3, 4] }) 
             .andWhere('t.owner_id = :ownerId', { ownerId: id })
             .groupBy('t.threat_id') 

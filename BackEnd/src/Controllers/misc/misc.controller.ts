@@ -52,13 +52,13 @@ export class MiscController {
    @Get('statGrouped/:uid')
   @HttpCode(200)
   public getTaskStatusGrouped(@Param('uid', ParseIntPipe) uid:number){
-    return this.statsService.getCategoryGrouped(uid);
+    return this.statsService.getConditionGrouped(uid);
   }
 
   @Get('threatGrouped/:uid')
   @HttpCode(200)
   public getTaskThreatLevelGrouped(@Param('uid', ParseIntPipe) uid:number){
-    return this.statsService.getCategoryGrouped(uid);
+    return this.statsService.getThreatLevelGrouped(uid);
   }
 
 }
