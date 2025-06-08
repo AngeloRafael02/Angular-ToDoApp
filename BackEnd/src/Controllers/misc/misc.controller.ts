@@ -45,18 +45,21 @@ export class MiscController {
 
   @Get('catGrouped/:uid')
   @HttpCode(200)
+  @Header('Cache-Control', 'public, max-age=60')
   public getTaskCategoryGrouped(@Param('uid', ParseIntPipe) uid:number){
     return this.statsService.getCategoryGrouped(uid);
   }
 
-   @Get('statGrouped/:uid')
+  @Get('statGrouped/:uid')
   @HttpCode(200)
+  @Header('Cache-Control', 'public, max-age=60')
   public getTaskStatusGrouped(@Param('uid', ParseIntPipe) uid:number){
     return this.statsService.getConditionGrouped(uid);
   }
 
   @Get('threatGrouped/:uid')
   @HttpCode(200)
+  @Header('Cache-Control', 'public, max-age=60')
   public getTaskThreatLevelGrouped(@Param('uid', ParseIntPipe) uid:number){
     return this.statsService.getThreatLevelGrouped(uid);
   }
