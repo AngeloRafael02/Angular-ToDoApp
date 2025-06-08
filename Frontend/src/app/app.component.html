@@ -12,8 +12,8 @@
 </mat-grid-list>
 </div>
 
-<mat-grid-list cols="12" rowHeight="200px">
-  <router-outlet />
+<mat-grid-list cols="12" rowHeight="200px" [@routeAnimations]="prepareRoute(outlet)">
+  <router-outlet #outlet="outlet"></router-outlet>
 </mat-grid-list>
 
 <div id="list">

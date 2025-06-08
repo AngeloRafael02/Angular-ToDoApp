@@ -1,10 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterOutlet, RouterLink,RouterModule } from '@angular/router';
 import { MatDialog,MatDialogRef } from "@angular/material/dialog";
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
+import {
+  trigger,
+  transition,
+  style,
+  query,
+  group,
+  animate,
+} from '@angular/animations';
 
 import { ClockComponent } from './components/clock/clock.component';
 import { ToDoFormComponent } from './components/to-do-form/to-do-form.component';
@@ -24,7 +32,13 @@ import { PostgresService } from './services/postgres.service';
     MatGridListModule
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+  styleUrl: './app.component.scss',
+  animations:[   
+    trigger('routeAnimations', [
+      transition('aboutSection => summarySection', slideTo('right')),
+      transition('summarySection => aboutSection', slideTo('left')),
+    ])
+  ]
 })
 export class AppComponent implements OnInit{
   private idleCallbackId: number | undefined;
@@ -59,7 +73,7 @@ export class AppComponent implements OnInit{
     this.psql.getAllThreats().subscribe(data => this.taskThreatLevels = data);
   }
 
-  OpenModal() {
+  public OpenModal() {
     this.matDialogRef = this.matDialog.open(ToDoFormComponent, {
       data: <dialogDataInterface>{ 
         allCat:this.taskCategories,
@@ -77,7 +91,36 @@ export class AppComponent implements OnInit{
     });
   }
 
-  CloseModal(){
+  public CloseModal(){
     this.matDialogRef.close(false)
   }
+
+  public prepareRoute(outlet: RouterOutlet) {
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData['animation'];
+  }
+}
+
+function slideTo(direction: string) {
+  const optional = { optional: true };
+  return [
+    query(':enter, :leave', [
+      style({
+        position: 'absolute',
+        top: 0,
+        [direction]: 0,
+        width: '100%'
+      })
+    ], optional),
+    query(':enter', [
+      style({ [direction]: '-100%' })
+    ]),
+    group([
+      query(':leave', [
+        animate('600ms ease', style({ [direction]: '100%' }))
+      ], optional),
+      query(':enter', [
+        animate('600ms ease', style({ [direction]: '0%' }))
+      ])
+    ])
+  ];
 }

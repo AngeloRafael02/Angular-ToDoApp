@@ -1,13 +1,13 @@
 import { Component,ContentChild,Input,OnInit, TemplateRef } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { LoadingService } from '../../services/loading.service';
-import { AsyncPipe, NgIf, NgTemplateOutlet } from '@angular/common';
+import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { Observable, tap } from 'rxjs';
 import { RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 
 @Component({
   selector: 'app-spinner',
-  imports: [MatProgressSpinnerModule,MatProgressSpinnerModule, AsyncPipe, NgIf, NgTemplateOutlet],
+  imports: [MatProgressSpinnerModule,MatProgressSpinnerModule, AsyncPipe, NgTemplateOutlet],
   template: `
     @if(loading$ | async) {
       <div class="spinner-container">
