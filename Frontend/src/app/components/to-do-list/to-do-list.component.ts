@@ -1,4 +1,4 @@
-import {  Component, Input, OnInit, ViewChild } from '@angular/core';
+import {  Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -14,6 +14,8 @@ import { MiscService } from '../../services/misc.service';
 import { categoriesInterface, conditionInterface, dialogDataInterface, taskViewInterface, threatInterface } from '../../interfaces';
 import { LoadingService } from '../../services/loading.service';
 import { AlertDialogData, AlertModalComponent } from '../alert-modal/alert-modal.component';
+import { Subscription } from 'rxjs';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-to-do-list',
@@ -30,23 +32,30 @@ import { AlertDialogData, AlertModalComponent } from '../alert-modal/alert-modal
   templateUrl:'to-do-list.component.html',
   styleUrls:['to-do-list.component.scss']
 })
-export class ToDoListComponent implements OnInit{
+export class ToDoListComponent implements OnInit,OnDestroy{
 
   constructor(
     private matDialog:MatDialog,
     private loadingService:LoadingService,
     private psql:PostgresService,
     private misc:MiscService,
+    private data:DataService
   ){
     this.psql.getColumnHeaders('task_view').subscribe(data => {
-        this.taskColumns = data;
-        this.taskColumns = this.misc.insertArrayAtIndex(this.taskColumns,["Options"],10)
-      });
-      this.psql.getAllTaskByID(1).subscribe(data => {
-        this.dataSource = new MatTableDataSource<taskViewInterface>(data);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-      });
+      this.taskColumns = data;
+      this.taskColumns = this.misc.insertArrayAtIndex(this.taskColumns,["Options"],10)
+    });
+    this.psql.getAllTaskByID(1).subscribe(data => {
+      this.dataSource = new MatTableDataSource<taskViewInterface>(data);
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator;
+    });
+    this.dataSubscription = this.data.data$.subscribe((data) => {
+      this.receivedData = data;
+      if (data.trim().toLowerCase() !== 'finished'){
+        this.chartFilter(data);
+      }
+    });
   }
   
   @Input() public taskCategories:categoriesInterface[] = [];
@@ -56,6 +65,8 @@ export class ToDoListComponent implements OnInit{
   public taskFormDialogRef:MatDialogRef<ToDoFormComponent>
   public taskColumns:string[] = [];
   public dataSource:MatTableDataSource<taskViewInterface>;
+  public receivedData: string;
+  private dataSubscription: Subscription;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -63,11 +74,17 @@ export class ToDoListComponent implements OnInit{
   ngOnInit():void {
     try {
       this.loadingService.loadingOn();
-      
+
     } catch (error) {
       
     } finally {
       this.loadingService.loadingOff()
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.dataSubscription) {
+      this.dataSubscription.unsubscribe();
     }
   }
 
@@ -89,6 +106,10 @@ export class ToDoListComponent implements OnInit{
   public applyFilter(event: Event):void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  private chartFilter(searchTerm:string){
+    this.dataSource.filter = searchTerm.trim().toLowerCase();
   }
 
   public deleteTask(ID:number):void{

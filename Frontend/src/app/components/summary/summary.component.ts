@@ -1,57 +1,22 @@
 import { Component,OnInit } from '@angular/core';
 import { Color, LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
+import { MatButtonModule } from '@angular/material/button';
+
 import { chartDataInterface } from '../../interfaces';
 import { PostgresService } from '../../services/postgres.service';
 import { forkJoin } from 'rxjs';
+import { DataService } from '../../services/data.service';
 
 @Component({
   standalone:true,
   selector: 'app-summary',
-  imports: [NgxChartsModule],
-  template: `
-  <div class='chartContainer'>
-    <ngx-charts-pie-chart
-      [view]="view"
-      [results]="taskGROUPBYCategories"
-      [legend]="showLegend"
-      [labels]="showLabels"
-      [legendPosition]="legendPosition"
-      [doughnut]="isDoughnut"
-      [gradient]="gradient"
-      (select)="onSelect($event)"
-      (activate)="onActivate($event)"
-      (deactivate)="onDeactivate($event)"
-      style="fill: white">
-    </ngx-charts-pie-chart>
-    <ngx-charts-pie-chart
-      [view]="view"
-      [results]="taskGROUPBYConditions"
-      [legend]="showLegend"
-      [labels]="showLabels"
-      [legendPosition]="legendPosition"
-      [doughnut]="isDoughnut"
-      [gradient]="gradient"
-      (select)="onSelect($event)"
-      (activate)="onActivate($event)"
-      (deactivate)="onDeactivate($event)"
-      style="fill: white">
-    </ngx-charts-pie-chart>
-    <ngx-charts-pie-chart
-      [view]="view"
-      [results]="taskGROUPBYThreatLevel"
-      [legend]="showLegend"
-      [labels]="showLabels"
-      [legendPosition]="legendPosition"
-      [doughnut]="isDoughnut"
-      [gradient]="gradient"
-      (select)="onSelect($event)"
-      (activate)="onActivate($event)"
-      (deactivate)="onDeactivate($event)"
-      style="fill: white">
-    </ngx-charts-pie-chart>
-  </div>
-  `,
+  imports: [
+    NgxChartsModule,
+    MatButtonModule
+  ],
+  templateUrl:'summary.component.html',
   styles: `
+    @use '../../../styles.scss' as c;
     .chartContainer{
       display: flex; /* Enables flexbox for the container */
       justify-content: space-around; /* Distributes space evenly around items */
@@ -64,18 +29,22 @@ import { forkJoin } from 'rxjs';
       margin-top: 0px;
       max-width: 30%; 
     }
+    #resetTableBTN{
+      @include c.buttonColors;
+      position: absolute; /* This takes the button out of normal flow */
+      z-index: 10; /* Ensure it's on top of other content */
+      top: 10px;
+      left: 30px;
+    }
   `
 })
 export class SummaryComponent implements OnInit {
   private UserID = 1
 
-  title = 'barchartApp';
-  public data:{name:string, value:number}[];
-
+  // CHART CONFIG
   public view: [number,number] = [400, 200];
   public loading: boolean = true;
   public error: string | null = null;
-  
   public gradient: boolean = true;
   public showLegend: boolean = false;
   public showLabels: boolean = true;
@@ -97,30 +66,13 @@ export class SummaryComponent implements OnInit {
   public taskGROUPBYConditions:chartDataInterface[];
   public taskGROUPBYThreatLevel:chartDataInterface[];
   constructor(
-    private psql:PostgresService
+    private psql:PostgresService,
+    private data:DataService
   ){
 
   }
 
   ngOnInit(): void {
-    this.data = [
-        {
-          "name": "Germany",
-          "value": 8940000
-        },
-        {
-          "name": "USA",
-          "value": 5000000
-        },
-        {
-          "name": "France",
-          "value": 7200000
-        },
-        {
-          "name": "UK",
-          "value": 6200000
-        }
-      ];
     this.loadChartData()
   }
 
@@ -147,8 +99,13 @@ export class SummaryComponent implements OnInit {
   }
 
   // Optional: Event handlers for chart interactions
-  onSelect(event: any): void {
+  public onSelect(event:{name:string,value:string,label:string}): void {
+    this.data.sendData(event.name)
     console.log('Item clicked', JSON.parse(JSON.stringify(event)));
+  }
+
+  public resetTable(){
+    this.data.sendData('')
   }
 
   onActivate(event: any): void {
