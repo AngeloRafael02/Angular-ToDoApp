@@ -31,6 +31,14 @@ export class PostgresService {
     return this.http.get<taskViewInterface[]>(`${this.nestJS}/task/all/${id}`)
   }
 
+  public getAllFinishedTaskByID(id:number):Observable<taskViewInterface[]>{
+    return this.http.get<taskViewInterface[]>(`${this.nestJS}/task/allFinished/${id}`)
+  }
+  
+  public getAllCancelledTaskByID(id:number):Observable<taskViewInterface[]>{
+    return this.http.get<taskViewInterface[]>(`${this.nestJS}/task/allCancelled/${id}`)
+  }
+
   public getOneTaskByID(id:number):Observable<taskViewInterface>{
     return this.http.get<taskViewInterface>(`${this.nestJS}/task/${id}`)
   }
