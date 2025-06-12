@@ -1,24 +1,18 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,NgZone, OnDestroy } from '@angular/core';
 import { RouterOutlet, RouterLink,RouterModule } from '@angular/router';
 import { MatDialog,MatDialogRef } from "@angular/material/dialog";
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
-import {
-  trigger,
-  transition,
-  style,
-  query,
-  group,
-  animate,
-} from '@angular/animations';
+import { trigger, transition, style, query, group, animate } from '@angular/animations';
 
 import { ClockComponent } from './components/clock/clock.component';
 import { ToDoFormComponent } from './components/to-do-form/to-do-form.component';
 import { ToDoListComponent } from './components/to-do-list/to-do-list.component';
-import { categoriesInterface, conditionInterface, dialogDataInterface, threatInterface } from './interfaces';
+import { categoriesInterface, conditionInterface, dialogDataInterface, taskViewInterface, threatInterface } from './interfaces';
 import { PostgresService } from './services/postgres.service';
+import { forkJoin, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +23,7 @@ import { PostgresService } from './services/postgres.service';
     MatTabsModule,
     ToDoListComponent,
     ClockComponent,
-    MatGridListModule
+    MatGridListModule,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -40,8 +34,10 @@ import { PostgresService } from './services/postgres.service';
     ])
   ]
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit,OnDestroy{
+  public nUserID:number = 1;
   private idleCallbackId: number | undefined;
+  private destroy$ = new Subject<void>();
 
   public matDialogRef: MatDialogRef<ToDoFormComponent>;
   public taskCategories:categoriesInterface[] = [];
@@ -50,15 +46,34 @@ export class AppComponent implements OnInit{
   public title = 'Frontend';
 
   constructor(
+    private ngZone: NgZone,
     private matDialog: MatDialog,
     private psql:PostgresService
   ) {}
 
-  ngOnInit(): void {
-    if ('requestIdleCallback' in window) {
-      this.idleCallbackId = window.requestIdleCallback((deadline) => {
-        this.processAllIdleTasks(); 
-      }, { timeout: 1000 })
+  public ngOnInit(): void {
+    this.scheduleIdleWork();
+  }
+  
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    if (this.idleCallbackId && 'cancelIdleCallback' in window) {
+      window.cancelIdleCallback(this.idleCallbackId);
+    }
+
+  }
+
+  private scheduleIdleWork(): void {
+   if ('requestIdleCallback' in window) {
+      this.ngZone.runOutsideAngular(() => {
+        this.idleCallbackId = window.requestIdleCallback((deadline) => {
+          this.processMainTask();
+           if (deadline.timeRemaining() > 0) {
+            this.scheduleIdleWork();
+           }
+        }, { timeout: 2000 }) 
+      })
     } else {
       console.warn('requestIdleCallback is not supported. Using setTimeout as fallback.');
       setTimeout(() => {
@@ -67,10 +82,26 @@ export class AppComponent implements OnInit{
     }
   }
 
-  private processAllIdleTasks(){
-    this.psql.getAllCategories().subscribe(data => this.taskCategories = data);
-    this.psql.getAllConditions().subscribe(data => this.taskConditions = data);
-    this.psql.getAllThreats().subscribe(data => this.taskThreatLevels = data);
+  private processMainTask():void{
+    forkJoin({
+      categories: this.psql.getAllCategories(),
+      conditions: this.psql.getAllConditions(),
+      threatLevels: this.psql.getAllThreats()
+    }).pipe(takeUntil(this.destroy$)).subscribe({
+      next:(results)=>{
+        this.taskCategories = results.categories;
+        this.taskConditions = results.conditions;
+        this.taskThreatLevels = results.threatLevels;
+      }, error:(error)=>{
+        console.error('Error fetching Selection Values:', error);
+      },complete:()=>{
+        console.log('forkJoin completed all data streams.');
+      }
+    });
+  }
+
+  private processAllIdleTasks():void{
+    this.processMainTask();
   }
 
   public OpenModal() {
