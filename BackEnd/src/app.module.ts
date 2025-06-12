@@ -22,6 +22,7 @@ import { UserController } from './Controllers/user/user.controller';
 import { DatabaseModule } from './database.module';
 import { cachingService } from './Providers/caching.provider';
 import { task_logs } from './Entities/tasks_trigger';
+import { statsService } from './Providers/stats.provider';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { task_logs } from './Entities/tasks_trigger';
     taskViewService,
     UserService,
     cachingService,
+    statsService,
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,

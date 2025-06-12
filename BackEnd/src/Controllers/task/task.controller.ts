@@ -15,6 +15,20 @@ export class TaskController {
     public findAll(@Param('idAll', ParseIntPipe) id: number):Promise<taskView[]>{
       return this.TaskService.getAllfromUID(id);
     }
+
+    @SkipThrottle()
+    @Get('allFinished/:idAll')
+    @HttpCode(200)
+    public findAllFinished(@Param('idAll', ParseIntPipe) id: number):Promise<taskView[]>{
+      return this.TaskService.getAllFinishedFromUID(id);
+    }
+
+    @SkipThrottle()
+    @Get('allCancelled/:idAll')
+    @HttpCode(200)
+    public findAllCancelled(@Param('idAll', ParseIntPipe) id: number):Promise<taskView[]>{
+      return this.TaskService.getAllCancelledFromUID(id);
+    }
     
     @Get(':idOne')
     @HttpCode(200)

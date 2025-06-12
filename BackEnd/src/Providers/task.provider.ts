@@ -14,7 +14,7 @@ export class taskViewService{
 
     constructor(
         @InjectRepository(taskView)
-        private taskViewRep:Repository<taskView>,
+        private taskViewRepo:Repository<taskView>,
 
         @InjectRepository(Task)
         private taskRepository: Repository<Task>,
@@ -34,7 +34,7 @@ export class taskViewService{
 
     public async getAllfromUID(id:number):Promise<taskView[]>{
         this.logger.log(`Retrieved All Tasks Based on uid: ${id}`)
-        return await this.taskViewRep.find({
+        return await this.taskViewRepo.find({
             where:{
                 UID:id,
                 Status:Not(In(['Finished','Cancelled'])),
@@ -44,9 +44,33 @@ export class taskViewService{
         });
     }
 
+    public async getAllFinishedFromUID(id:number){
+        this.logger.log(`Retrieved All Finsihed Tasks Based on uid: ${id}`)
+        return await this.taskViewRepo.find({
+            where:{
+                UID:id,
+                Status:In(['Finished'])
+            }, order:{
+                Deadline:'ASC'
+            }
+        })
+    }
+
+    public async getAllCancelledFromUID(id:number){
+        this.logger.log(`Retrieved All Finsihed Tasks Based on uid: ${id}`)
+        return await this.taskViewRepo.find({
+            where:{
+                UID:id,
+                Status:In(['Cancelled'])
+            }, order:{
+                Deadline:'ASC'
+            }
+        })
+    }
+
     public async getOneFromID(id:number):Promise<taskView> {
         this.logger.log(`Retrieved One Task Based on id: ${id}`)
-        return await this.taskViewRep.findOneOrFail({where:{ID:id}});
+        return await this.taskViewRepo.findOneOrFail({where:{ID:id}});
     }
     
     public async createOne(taskData: Partial<Task> ):Promise<Task>{
