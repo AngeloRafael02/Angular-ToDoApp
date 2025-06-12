@@ -1,7 +1,7 @@
 <div class="tableContainer">
   <mat-form-field>
     <mat-label>Filter</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
+    <input matInput (keyup)="applySearchFilter($event)" placeholder="Ex. ium" #input>
   </mat-form-field>
   <button mat-flat-button color="primary" type="button" (click)="newTaskModal()" id="newTaskBTN">New Task</button>
   <table mat-table [dataSource]="dataSource" matSort matSortActive="Deadline" matSortDirection="desc" class="mat-elevation-z8" id="tasks">

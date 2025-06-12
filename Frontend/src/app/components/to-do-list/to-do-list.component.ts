@@ -1,4 +1,4 @@
-import {  Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import {  Component, Input, OnDestroy, OnInit,OnChanges, ViewChild, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -32,7 +32,7 @@ import { DataService } from '../../services/data.service';
   templateUrl:'to-do-list.component.html',
   styleUrls:['to-do-list.component.scss']
 })
-export class ToDoListComponent implements OnInit,OnDestroy{
+export class ToDoListComponent implements OnInit,OnChanges,OnDestroy{
 
   constructor(
     private matDialog:MatDialog,
@@ -45,19 +45,9 @@ export class ToDoListComponent implements OnInit,OnDestroy{
       this.taskColumns = data;
       this.taskColumns = this.misc.insertArrayAtIndex(this.taskColumns,["Options"],10)
     });
-    this.psql.getAllTaskByID(1).subscribe(data => {
-      this.dataSource = new MatTableDataSource<taskViewInterface>(data);
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-    });
-    this.dataSubscription = this.data.data$.subscribe((data) => {
-      this.receivedData = data;
-      if (data.trim().toLowerCase() !== 'finished'){
-        this.chartFilter(data);
-      }
-    });
+
   }
-  
+  @Input() public nUserID:number;
   @Input() public taskCategories:categoriesInterface[] = [];
   @Input() public taskConditions:conditionInterface[] = [];
   @Input() public taskThreatLevels:threatInterface[] = [];
@@ -82,6 +72,22 @@ export class ToDoListComponent implements OnInit,OnDestroy{
     }
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['nUserID']){
+      this.psql.getAllTaskByID(this.nUserID).subscribe(data => {
+        this.dataSource = new MatTableDataSource<taskViewInterface>(data);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+      });
+      this.dataSubscription = this.data.data$.subscribe((data) => {
+        this.receivedData = data;
+        if (data.trim().toLowerCase() !== 'finished'){
+          this.chartFilter(data);
+        }
+      });
+    }
+  }
+
   ngOnDestroy(): void {
     if (this.dataSubscription) {
       this.dataSubscription.unsubscribe();
@@ -103,11 +109,16 @@ export class ToDoListComponent implements OnInit,OnDestroy{
     });
   }
 
-  public applyFilter(event: Event):void {
+  public applySearchFilter(event: Event):void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
-
+  public applyCategoryFilter(category: string):void {
+    this.dataSource.filter = category.trim().toLowerCase();
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage(); // Go to the first page after filtering
+    }
+  }
   private chartFilter(searchTerm:string){
     this.dataSource.filter = searchTerm.trim().toLowerCase();
   }
@@ -128,6 +139,9 @@ export class ToDoListComponent implements OnInit,OnDestroy{
       if (result) {
         console.log('User clicked Yes');
         this.psql.deleteOneTask(ID);
+        setTimeout(function() {
+          location.reload();
+        }, 1000);
       } else {
         console.log('User clicked No');
         // Perform action for No
@@ -143,78 +157,19 @@ export class ToDoListComponent implements OnInit,OnDestroy{
   }
 
   public deadlineFormatHelper(deadline:string):string{
-    if (deadline == null){
-      return  '';
-    } else {
-      return deadline || deadline.trim() !== '' ? deadline.toString().slice(0,10) : '';
-
-    }
+    return this.misc.dateFormatHelper(deadline);
   }
   
   public getThreatLevelCellClass(threat:string): string {
-    switch (threat){
-      case 'Low':
-        return 'greenCell';
-      case 'Medium':
-        return 'yellowCell';
-      case 'High':
-        return 'greenCell';
-      case 'Alarming':
-        return 'redCell';
-      case 'Inevitable':
-        return 'aquaCell';
-      default:
-        return 'whiteCell'
-    }
+    return this.misc.ModifyThreatLevelCellColor(threat);
   }
 
   public getStatusColorClass(status:string): string {
-    switch (status){
-      case 'Unfinished':
-        return 'greyCell';
-      case 'In Progress':
-        return 'yellowCell';
-      case 'Finished':
-        return 'greenCell';
-      case 'Cancelled':
-        return 'redCell';
-      case 'Delayed':
-        return 'aquaCell';
-      case 'Continuous':
-        return 'lightblueCell';
-      case 'On Hold':
-        return 'coralCell';
-      case 'Speculation':
-        return 'bluevioletCell';
-      default:
-        return 'whiteCell'
-    }
+    return this.misc.ModifyStatusCellColor(status);
   }
 
   public evaluateDate(row:taskViewInterface):string {
-    const dateString = row.Deadline
-    if (dateString == null) {
-      return 'whiteRow';
-    }
-    
-    const inputDate:Date = new Date(dateString);
-    inputDate.setHours(0, 0, 0, 0);
-    const today:Date = new Date();
-    today.setHours(0, 0, 0, 0);
-    const timeDifference:number = today.getTime() - inputDate.getTime();
-    const daysDifference:number = timeDifference / (1000 * 60 * 60 * 24);
-  
-    if (daysDifference === 0) {
-      return 'redRow';
-    } else if (daysDifference >= -5 && daysDifference < 0) {
-      return 'orangeRow';
-    } else if (daysDifference < -5) {
-      return 'greenRow';
-    } else if (daysDifference >= 1) {
-      return 'blackRow';
-    } else {
-      return 'whiteRow';
-    }
+    return this.misc.RowColorPerDeadline(row.Deadline);
   }
 
   public newTaskModal():void {
@@ -240,10 +195,4 @@ export class ToDoListComponent implements OnInit,OnDestroy{
     this.taskFormDialogRef.close(false)
   }
 
-  public applyCategoryFilter(category: string):void {
-    this.dataSource.filter = category.trim().toLowerCase();
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage(); // Go to the first page after filtering
-    }
-  }
 }
