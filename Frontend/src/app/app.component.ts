@@ -1,5 +1,5 @@
 import { Component, OnInit,NgZone, OnDestroy } from '@angular/core';
-import { RouterOutlet, RouterLink,RouterModule } from '@angular/router';
+import { RouterOutlet,RouterModule, Router, NavigationEnd} from '@angular/router';
 import { MatDialog,MatDialogRef } from "@angular/material/dialog";
 import { MatButtonModule } from '@angular/material/button';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -12,7 +12,10 @@ import { ToDoFormComponent } from './components/to-do-form/to-do-form.component'
 import { ToDoListComponent } from './components/to-do-list/to-do-list.component';
 import { categoriesInterface, conditionInterface, dialogDataInterface, taskViewInterface, threatInterface } from './interfaces';
 import { PostgresService } from './services/postgres.service';
-import { forkJoin, Subject, takeUntil } from 'rxjs';
+import { filter, forkJoin, Subject, Subscription, takeUntil } from 'rxjs';
+import { ToDoFinishedComponent } from './components/to-do-finished/to-do-finished.component';
+import { ToDoCancelledComponent } from './components/to-do-cancelled/to-do-cancelled.component';
+
 
 @Component({
   selector: 'app-root',
@@ -24,6 +27,8 @@ import { forkJoin, Subject, takeUntil } from 'rxjs';
     ToDoListComponent,
     ClockComponent,
     MatGridListModule,
+    ToDoFinishedComponent,
+    ToDoCancelledComponent
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
@@ -38,7 +43,10 @@ export class AppComponent implements OnInit,OnDestroy{
   public nUserID:number = 1;
   private idleCallbackId: number | undefined;
   private destroy$ = new Subject<void>();
+  currentUrl: string = '';
+  routerSubscription: Subscription;
 
+  public currentRoute:string='';
   public matDialogRef: MatDialogRef<ToDoFormComponent>;
   public taskCategories:categoriesInterface[] = [];
   public taskConditions:conditionInterface[] = [];
@@ -46,6 +54,7 @@ export class AppComponent implements OnInit,OnDestroy{
   public title = 'Frontend';
 
   constructor(
+    private router:Router,
     private ngZone: NgZone,
     private matDialog: MatDialog,
     private psql:PostgresService
@@ -53,6 +62,11 @@ export class AppComponent implements OnInit,OnDestroy{
 
   public ngOnInit(): void {
     this.scheduleIdleWork();
+    this.routerSubscription = this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: any) => {
+      this.currentUrl = event.url.substring(1);
+    });
   }
   
   public ngOnDestroy(): void {

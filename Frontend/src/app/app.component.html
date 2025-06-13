@@ -1,7 +1,7 @@
 <div class="topArea">
 <mat-grid-list cols="12" rowHeight="75px">
   <mat-grid-tile colspan="3"> 
-    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="appNav" value="about">
+    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="appNav" value="{{currentUrl}}">
       <mat-button-toggle routerLink="about" class="buttonBase" value="about" mat-flat-button >About</mat-button-toggle>
       <mat-button-toggle routerLink="summary" class="buttonBase" value="summary" mat-flat-button >Summary</mat-button-toggle>
     </mat-button-toggle-group>
@@ -13,7 +13,7 @@
 </div>
 
 <mat-grid-list cols="12" rowHeight="200px" [@routeAnimations]="prepareRoute(outlet)">
-  <router-outlet #outlet="outlet"></router-outlet>
+  <router-outlet #outlet="outlet" ></router-outlet>
 </mat-grid-list>
 
 <div id="list">
@@ -24,3 +24,6 @@
       [nUserID]="nUserID">
     </app-to-do-list>
 </div>
+
+<app-to-do-finished [nUserID]="nUserID"></app-to-do-finished>
+<app-to-do-cancelled [nUserID]="nUserID"></app-to-do-cancelled> 

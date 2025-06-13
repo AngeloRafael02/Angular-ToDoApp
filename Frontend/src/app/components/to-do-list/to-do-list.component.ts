@@ -27,7 +27,7 @@ import { DataService } from '../../services/data.service';
     MatSortModule,
     MatFormField,
     MatLabel,
-    MatInputModule
+    MatInputModule,
   ],
   templateUrl:'to-do-list.component.html',
   styleUrls:['to-do-list.component.scss']
@@ -35,31 +35,32 @@ import { DataService } from '../../services/data.service';
 export class ToDoListComponent implements OnInit,OnChanges,OnDestroy{
 
   constructor(
-    private matDialog:MatDialog,
-    private loadingService:LoadingService,
-    private psql:PostgresService,
-    private misc:MiscService,
-    private data:DataService
+    public matDialog:MatDialog,
+    public loadingService:LoadingService,
+    public psql:PostgresService,
+    public misc:MiscService,
+    public data:DataService
   ){
     this.psql.getColumnHeaders('task_view').subscribe(data => {
       this.taskColumns = data;
       this.taskColumns = this.misc.insertArrayAtIndex(this.taskColumns,["Options"],10)
     });
-
   }
+
   @Input() public nUserID:number;
   @Input() public taskCategories:categoriesInterface[] = [];
   @Input() public taskConditions:conditionInterface[] = [];
   @Input() public taskThreatLevels:threatInterface[] = [];
   
+  private tasks:taskViewInterface[] = [] 
   public taskFormDialogRef:MatDialogRef<ToDoFormComponent>
   public taskColumns:string[] = [];
-  public dataSource:MatTableDataSource<taskViewInterface>;
+  public dataSource:MatTableDataSource<taskViewInterface> = new MatTableDataSource(this.tasks);
   public receivedData: string;
-  private dataSubscription: Subscription;
+  public dataSubscription: Subscription;
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) public sort: MatSort;
+  @ViewChild(MatPaginator) public paginator: MatPaginator;
 
   ngOnInit():void {
     try {
@@ -119,7 +120,7 @@ export class ToDoListComponent implements OnInit,OnChanges,OnDestroy{
       this.dataSource.paginator.firstPage(); // Go to the first page after filtering
     }
   }
-  private chartFilter(searchTerm:string){
+  public chartFilter(searchTerm:string){
     this.dataSource.filter = searchTerm.trim().toLowerCase();
   }
 

@@ -36,7 +36,7 @@ FrontEnd
     - how pie graph of tasks based condition
     - how pie graph of tasks based threatLevel
 > Clicking to a chart's Slice will filter out the todolist - DONE
-> Seaparate Finished Table and Canceled Table
+> Separate Finished Table and Canceled Table
     - both have their own routes + lazy Loaded
     - both of the + Main table must be inside router-outlet
     - add annimations for transition of them

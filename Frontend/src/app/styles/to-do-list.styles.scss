@@ -1,0 +1,58 @@
+@use '../../styles.scss' as c;
+@use '../app.component.scss' as app;
+@use '@angular/material' as mat;
+
+
+mat-paginator{
+  border: 2px solid black;
+  @include mat.paginator-overrides((
+    container-text-color: black,
+    container-background-color: c.$color3,
+    disabled-icon-color: black,
+    enabled-icon-color: c.$color4,
+  ));
+}
+
+table,th,td   {
+    border: 1px solid black;
+    th,td {
+      text-align: center;
+      &:first-child,
+      &:nth-child(9) ~ th,
+      &:nth-child(9) ~ td{ /* Using the parent selector '&' */
+        display: none;
+      }
+    }
+    th{
+      @include c.buttonColors;
+    }
+    td{
+      border: 1px solid black;
+      button{
+        @include c.buttonColors;
+        width: 50px; 
+        margin-left:5px;
+      }
+    }
+}
+
+.footerRow{
+  @include c.buttonColors;
+}
+
+.tableContainer{
+  margin-top: 20px;
+}
+
+.greenCell,.greenRow { background-color: lightgreen; }
+.orangeCell,.orangeRow { background-color: orange; }
+.redCell,.redRow { background-color: lightcoral;  }
+.greyCell{ background-color:dimgray; color:white; }
+.yellowCell{ background-color:yellow; }
+.aquaCell{ background-color:aqua;}
+.lightblueCell{ background-color:lightblue;}
+.coralCell{ background-color:coral;}
+.bluevioletCell{ background-color:blueviolet;}
+.whiteCell,.whiteRow{ background-color:white;}
+.blackCell,.blackRow { background-color: darkgray;}
+
