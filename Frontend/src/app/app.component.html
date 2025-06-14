@@ -16,14 +16,20 @@
   <router-outlet #outlet="outlet" ></router-outlet>
 </mat-grid-list>
 
-<div id="list">
-    <app-to-do-list 
-      [taskCategories]="taskCategories" 
-      [taskConditions]="taskConditions" 
-      [taskThreatLevels]="taskThreatLevels"
-      [nUserID]="nUserID">
-    </app-to-do-list>
+<div [@slideAnimation]="activeTable" id="list">
+  <app-to-do-list 
+    *ngIf="activeTable === 'Main'"
+    [taskCategories]="taskCategories" 
+    [taskConditions]="taskConditions" 
+    [taskThreatLevels]="taskThreatLevels"
+    [nUserID]="nUserID">
+  </app-to-do-list>
+  <app-to-do-finished 
+    *ngIf="activeTable === 'Finished'"
+    [nUserID]="nUserID">
+  </app-to-do-finished>
+  <app-to-do-cancelled 
+    *ngIf="activeTable === 'Cancelled'" 
+    [nUserID]="nUserID">
+  </app-to-do-cancelled> 
 </div>
-
-<app-to-do-finished [nUserID]="nUserID"></app-to-do-finished>
-<app-to-do-cancelled [nUserID]="nUserID"></app-to-do-cancelled> 

@@ -100,11 +100,20 @@ export class SummaryComponent implements OnInit {
 
   // Optional: Event handlers for chart interactions
   public onSelect(event:{name:string,value:string,label:string}): void {
-    this.data.sendData(event.name)
+    if (event.label.toString().toLowerCase()==='finished'){
+      this.data.sendActiveTableData('Finished');
+    } else if (event.label.toString().toLowerCase()==='cancelled'){
+      this.data.sendActiveTableData('Cancelled');
+    } else {
+      this.data.sendActiveTableData('Main');
+      this.data.sendData(event.name)
+    }
+    
     console.log('Item clicked', JSON.parse(JSON.stringify(event)));
   }
 
   public resetTable(){
+    this.data.sendActiveTableData('Main');
     this.data.sendData('')
   }
 

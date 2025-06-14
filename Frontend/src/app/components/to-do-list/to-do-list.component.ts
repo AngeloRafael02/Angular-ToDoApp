@@ -53,6 +53,7 @@ export class ToDoListComponent implements OnInit,OnChanges,OnDestroy{
   @Input() public taskThreatLevels:threatInterface[] = [];
   
   private tasks:taskViewInterface[] = [] 
+  public tasksCount:number=0;
   public taskFormDialogRef:MatDialogRef<ToDoFormComponent>
   public taskColumns:string[] = [];
   public dataSource:MatTableDataSource<taskViewInterface> = new MatTableDataSource(this.tasks);
@@ -79,6 +80,7 @@ export class ToDoListComponent implements OnInit,OnChanges,OnDestroy{
         this.dataSource = new MatTableDataSource<taskViewInterface>(data);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+        this.tasksCount = data.length;
       });
       this.dataSubscription = this.data.data$.subscribe((data) => {
         this.receivedData = data;

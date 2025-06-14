@@ -15,11 +15,14 @@ import { PostgresService } from './services/postgres.service';
 import { filter, forkJoin, Subject, Subscription, takeUntil } from 'rxjs';
 import { ToDoFinishedComponent } from './components/to-do-finished/to-do-finished.component';
 import { ToDoCancelledComponent } from './components/to-do-cancelled/to-do-cancelled.component';
+import { DataService } from './services/data.service';
+import { CommonModule } from '@angular/common';
 
 
 @Component({
   selector: 'app-root',
   imports: [
+    CommonModule,
     RouterModule,
     MatButtonModule, 
     MatButtonToggleModule,
@@ -36,6 +39,34 @@ import { ToDoCancelledComponent } from './components/to-do-cancelled/to-do-cance
     trigger('routeAnimations', [
       transition('aboutSection => summarySection', slideTo('right')),
       transition('summarySection => aboutSection', slideTo('left')),
+    ]),
+    trigger('slideAnimation', [
+      transition('* <=> *', [
+        style({ position: 'relative' }),
+        query(':enter, :leave', [
+          style({
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            opacity: 0
+          })
+        ], { optional: true }),
+        query(':enter', [
+          style({ transform: 'translateX(100%)' })
+        ], { optional: true }),
+        query(':leave', [
+          style({ transform: 'translateX(0%)' })
+        ], { optional: true }),
+        group([
+          query(':leave', [
+            animate('600ms ease-out', style({ transform: 'translateX(-100%)', opacity: 0 }))
+          ], { optional: true }),
+          query(':enter', [
+            animate('600ms ease-out', style({ transform: 'translateX(0%)', opacity: 1 }))
+          ], { optional: true })
+        ])
+      ]),
     ])
   ]
 })
@@ -45,19 +76,22 @@ export class AppComponent implements OnInit,OnDestroy{
   private destroy$ = new Subject<void>();
   currentUrl: string = '';
   routerSubscription: Subscription;
+  activeTableSubscription:Subscription;
 
   public currentRoute:string='';
   public matDialogRef: MatDialogRef<ToDoFormComponent>;
   public taskCategories:categoriesInterface[] = [];
   public taskConditions:conditionInterface[] = [];
   public taskThreatLevels:threatInterface[] = [];
+  public activeTable:string ='Main';
   public title = 'Frontend';
 
   constructor(
     private router:Router,
     private ngZone: NgZone,
     private matDialog: MatDialog,
-    private psql:PostgresService
+    private psql:PostgresService,
+    private data:DataService
   ) {}
 
   public ngOnInit(): void {
@@ -67,6 +101,9 @@ export class AppComponent implements OnInit,OnDestroy{
     ).subscribe((event: any) => {
       this.currentUrl = event.url.substring(1);
     });
+    this.activeTableSubscription = this.data.getActiveTable().subscribe((data)=>{
+      this.activeTable = data
+    })
   }
   
   public ngOnDestroy(): void {

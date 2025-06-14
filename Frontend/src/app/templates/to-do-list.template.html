@@ -3,7 +3,6 @@
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applySearchFilter($event)" placeholder="Ex. ium" #input>
   </mat-form-field>
-  <button mat-flat-button color="primary" type="button" (click)="newTaskModal()" id="newTaskBTN">New Task</button>
   <table mat-table [dataSource]="dataSource" matSort matSortActive="Deadline" matSortDirection="desc" class="mat-elevation-z8" id="tasks">
       <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
@@ -114,7 +113,7 @@
       </tr>
     </table>
 
-    <mat-paginator [pageSizeOptions]="[5, 10]" showFirstLastButtons aria-label="Select page of task">
+    <mat-paginator [pageSizeOptions]="[5, 10, tasksCount]" showFirstLastButtons aria-label="Select page of task">
     </mat-paginator>
 </div>
 
