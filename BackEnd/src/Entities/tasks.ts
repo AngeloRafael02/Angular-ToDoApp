@@ -7,7 +7,8 @@ import {
     ViewColumn,
     DataSource,
     ManyToOne,
-    JoinColumn
+    JoinColumn,
+    Check
 } from "typeorm";
 import { Categories } from "./categories";
 import { Conditions } from "./conditions";
@@ -15,6 +16,7 @@ import { User } from "./users";
 import { Threats } from "./threats";
 
 @Entity()
+@Check('prio >= 0 OR prio IS NULL')
 export class Task{
     @PrimaryGeneratedColumn({ name:'id', type:'bigint' })
     id!:number
