@@ -106,10 +106,10 @@ export class SummaryComponent implements OnInit {
       this.data.sendActiveTableData('Cancelled');
     } else {
       this.data.sendActiveTableData('Main');
-      this.data.sendData(event.name)
+      setTimeout(()=>{
+        this.data.sendData(event.name)
+      },200)
     }
-    
-    console.log('Item clicked', JSON.parse(JSON.stringify(event)));
   }
 
   public resetTable(){
