@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ToDoFinishedComponent } from './to-do-finished.component';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
 describe('ToDoFinishedComponent', () => {
   let component: ToDoFinishedComponent;
@@ -8,7 +10,11 @@ describe('ToDoFinishedComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ToDoFinishedComponent]
+      imports: [ToDoFinishedComponent],
+      providers:[
+        provideHttpClient(),
+        provideHttpClientTesting()
+      ]
     })
     .compileComponents();
 
