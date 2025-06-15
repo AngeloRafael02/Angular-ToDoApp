@@ -12,8 +12,7 @@
 }
 
 .buttonBase{
-    color: white;
-    background-color: #50727B;
+    @include c.buttonColors;
 }
 
 ul.appNav {
