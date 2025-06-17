@@ -1,4 +1,4 @@
-import { Injectable,Logger } from '@nestjs/common';
+import { Injectable,Logger, Scope } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Not, Repository, UpdateResult } from 'typeorm';
 
@@ -8,7 +8,7 @@ import { User } from "src/Entities/users";
 import { Conditions } from "src/Entities/conditions";
 import { Threats } from 'src/Entities/threats';
 
-@Injectable()
+@Injectable({scope:Scope.REQUEST})
 export class taskViewService{
     private logger:Logger = new Logger(taskViewService.name,{timestamp:true})
 
