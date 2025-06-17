@@ -31,6 +31,7 @@ import { MatInputModule } from '@angular/material/input';
   styleUrls: ['../../styles/to-do-list.styles.scss']
 })
 export class ToDoCancelledComponent extends ToDoListComponent implements OnInit,OnChanges,OnDestroy {
+  override tableID:string='cancelled';
 
   constructor(
     override matDialog:MatDialog,

@@ -30,7 +30,8 @@ import { taskViewInterface } from '../../interfaces';
   styleUrls: ['../../styles/to-do-list.styles.scss']
 })
 export class ToDoFinishedComponent extends ToDoListComponent implements OnInit,OnChanges,OnDestroy {
-
+  override tableID:string='finished';
+  
   constructor(
     override matDialog:MatDialog,
     override loadingService:LoadingService,
@@ -60,7 +61,7 @@ export class ToDoFinishedComponent extends ToDoListComponent implements OnInit,O
         this.receivedData = data;
         if (data.trim().toLowerCase() !== 'finished'){
           this.chartFilter(data);
-        }
+        }566
       });
     }
   }

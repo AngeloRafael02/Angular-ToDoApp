@@ -29,4 +29,9 @@ describe('ToDoFormComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should initialize the form as invalid', () => {
+    expect(component.taskForm).toBeDefined(); // Check if formGroup is initialized
+    expect(component.taskForm.invalid).toBeTruthy(); // Expect the form to be invalid initially
+  });
 });

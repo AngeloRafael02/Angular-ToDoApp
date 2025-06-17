@@ -53,6 +53,7 @@ export class ToDoListComponent implements OnInit,OnChanges,OnDestroy{
   @Input() public taskThreatLevels:threatInterface[] = [];
   
   private tasks:taskViewInterface[] = [] 
+  public tableID:string='tasks';
   public tasksCount:number=0;
   public taskFormDialogRef:MatDialogRef<ToDoFormComponent>
   public taskColumns:string[] = [];
