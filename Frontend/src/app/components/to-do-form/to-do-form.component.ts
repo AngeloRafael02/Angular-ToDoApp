@@ -1,10 +1,10 @@
-import { Component,Inject,OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component,Inject,OnInit } from '@angular/core';
 import { PostgresService } from '../../services/postgres.service';
 import { categoriesInterface, conditionInterface, dialogDataInterface, taskInterface, threatInterface } from '../../interfaces';
 import { ReactiveFormsModule, FormBuilder,Validators, FormGroup, FormControl} from "@angular/forms";
 import { CommonModule } from '@angular/common';
 import {provideNativeDateAdapter} from '@angular/material/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -16,6 +16,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
   selector: 'app-to-do-form',
   providers:[PostgresService,provideNativeDateAdapter()],
   imports: [
+    MatDialogContent,
+    MatDialogActions,
     MatButtonModule,
     MatFormFieldModule, 
     MatInputModule, 
@@ -28,17 +30,18 @@ import { MatGridListModule } from '@angular/material/grid-list';
   templateUrl:'to-do-form.component.html',
   styles:`
     @use '../../../styles.scss' as c ;
+    h2{margin-left:30px;}
     #note{ resize:none; }
-    #formBox{ width:500px; padding:1%; }
+    #formBox{ width:500px; padding:1%;background-color:c.$color4}
     .modalBTN{ 
       @include c.buttonColors;
       margin-left:1%; 
       margin-bottom:1%; 
     }
-  `
+  `,
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class ToDoFormComponent implements OnInit{
-  
  selected = 'option2';
 test = "1";
   public mode:string = '';
@@ -64,6 +67,7 @@ test = "1";
   public taskThreatLevels:threatInterface[] = [];
 
   constructor(
+    readonly dialog:MatDialog,
     private fb: FormBuilder,
     private psql:PostgresService,
     public taskFormDialogRef:MatDialogRef<ToDoFormComponent>,
@@ -137,9 +141,9 @@ test = "1";
         this.psql.updateOneTask(this.taskForm.value, this.taskID);
       }
       this.taskFormDialogRef.close()
-      setTimeout(function() {
-        location.reload();
-      }, 1000);
+      //setTimeout(function() {
+      //  location.reload();
+      //}, 1000);
     } else {
       console.log("Form is invalid");
     }

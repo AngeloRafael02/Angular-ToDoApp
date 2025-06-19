@@ -13,12 +13,21 @@ $color4:#78A083;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-html, body { 
+
+body { 
     height: 100%;
-    body { 
-        margin: 0; 
-        font-family: Roboto, "Helvetica Neue", sans-serif; 
-        background-color: $color1;
-    }
-    
+    margin: 0; 
+    font-family: Roboto, "Helvetica Neue", sans-serif; 
+    background-color: $color1;
+
+    @include mat.theme((
+        color: (
+        theme-type: light,
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+        ),
+        typography: Roboto,
+        density: 0,
+    ));
 }
+    

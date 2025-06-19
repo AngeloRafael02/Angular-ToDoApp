@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -27,7 +27,8 @@ import { taskViewInterface } from '../../interfaces';
     MatInputModule,
   ],
   templateUrl: '../../templates/to-do-list.template.html',
-  styleUrls: ['../../styles/to-do-list.styles.scss']
+  styleUrls: ['../../styles/to-do-list.styles.scss'],
+  changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class ToDoFinishedComponent extends ToDoListComponent implements OnInit,OnChanges,OnDestroy {
   override tableID:string='finished';

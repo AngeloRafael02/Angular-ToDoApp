@@ -1,7 +1,7 @@
 <div id="formBox">
     <h2 mat-dialog-title>Task</h2>
     <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
-    <div mat-dialog-content>
+    <mat-dialog-content>
         <mat-grid-list cols="2" rowHeight="100px">
             <mat-grid-tile colspan="1">
                 <mat-form-field>
@@ -10,7 +10,16 @@
                 </mat-form-field>
             </mat-grid-tile>
             <mat-grid-tile colspan="1">
-                <mat-form-field>
+                <mat-form-field [style.width.px]=212>
+                    <mat-label>Deadline</mat-label>
+                    <input matInput [matDatepicker]="picker3" id="deadline" formControlName="deadline" [value]="DeadlineStrValue">
+                    <mat-hint>MM/DD/YYYY</mat-hint>
+                    <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
+                    <mat-datepicker #picker3></mat-datepicker>
+                </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+                <mat-form-field [style.width.px]=440>
                     <mat-label>Textarea</mat-label>
                     <textarea matInput id="note" formControlName="note"></textarea>
                 </mat-form-field>
@@ -45,22 +54,13 @@
                     </mat-select>
                 </mat-form-field>
             </mat-grid-tile>
-            <mat-grid-tile colspan="1">
-                <mat-form-field>
-                    <mat-label>Deadline</mat-label>
-                    <input matInput [matDatepicker]="picker3" id="deadline" formControlName="deadline" [value]="DeadlineStrValue">
-                    <mat-hint>MM/DD/YYYY</mat-hint>
-                    <mat-datepicker-toggle matIconSuffix [for]="picker3"></mat-datepicker-toggle>
-                    <mat-datepicker #picker3></mat-datepicker>
-                </mat-form-field>
-            </mat-grid-tile>
-            <mat-grid-tile colspan="1">
-                <div mat-dialog-actions align="left">
-                    <button mat-flat-button class="modalBTN" type="submit">Submit</button>
-                </div>
-            </mat-grid-tile>
+
+
         </mat-grid-list>
-    </div>
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <button mat-flat-button class="modalBTN" type="submit">Submit</button>
+    </mat-dialog-actions>
     </form>
 
 </div>

@@ -1,4 +1,4 @@
-import {  Component, Input, OnDestroy, OnInit,OnChanges, ViewChild, SimpleChanges } from '@angular/core';
+import {  Component, Input, OnDestroy, OnInit,OnChanges, ViewChild, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -30,7 +30,8 @@ import { DataService } from '../../services/data.service';
     MatInputModule,
   ],
   templateUrl:'to-do-list.component.html',
-  styleUrls:['to-do-list.component.scss']
+  styleUrls:['to-do-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToDoListComponent implements OnInit,OnChanges,OnDestroy{
 
