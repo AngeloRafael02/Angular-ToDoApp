@@ -5,6 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "optibuild":" ng build --aot=true --optimization=true --verbose=true --progress=true",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
