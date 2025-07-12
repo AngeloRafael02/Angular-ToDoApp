@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit,OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnDestroy, OnInit,OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { ToDoListComponent } from '../to-do-list/to-do-list.component';
 import { MatDialog } from '@angular/material/dialog';
 import { LoadingService } from '../../services/loading.service';
@@ -28,7 +28,8 @@ import { MatInputModule } from '@angular/material/input';
     MatFormField
   ],
   templateUrl: '../../templates/to-do-list.template.html',
-  styleUrls: ['../../styles/to-do-list.styles.scss']
+  styleUrls: ['../../styles/to-do-list.styles.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToDoCancelledComponent extends ToDoListComponent implements OnInit,OnChanges,OnDestroy {
   override tableID:string='cancelled';

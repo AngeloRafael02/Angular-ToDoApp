@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MarkdownModule } from 'ngx-markdown';
 import { MiscService } from '../../services/misc.service';
 
 @Component({
   selector: 'app-about',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MarkdownModule
   ], 
