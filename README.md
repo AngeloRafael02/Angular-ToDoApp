@@ -19,7 +19,7 @@ see this [To Do Textfile](https://github.com/AngeloRafael02/ToDoApp/blob/master/
 
 ## Current Stack / Used Packages
 FrontEnd
-- Angular 18
+- Angular 19
 - Angular Material
 - SCSS
 - ngx-markdown
