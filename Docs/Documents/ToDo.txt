@@ -1,9 +1,3 @@
-BackEnd
-> Create a Database Service to connect to cloud DB if 
-    Local DB does not connect successfully - DONE
-> Modfy Query -  Order by Deadline - DONE
-> Task Query pagination
-
 FrontEnd
 > Implement Color Pallete - DONE
     - #35374B - CHANGED TO #404258
