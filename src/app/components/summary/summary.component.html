@@ -1,42 +1,48 @@
-<button mat-flat-button color="primary" type="button" (click)="resetTable()" id="resetTableBTN">Reset Table</button>
-<div class='chartContainer'>
-    <ngx-charts-pie-chart
-        [view]="view"
-        [results]="taskGROUPBYCategories"
-        [legend]="showLegend"
-        [labels]="showLabels"
-        [legendPosition]="legendPosition"
-        [doughnut]="isDoughnut"
-        [gradient]="gradient"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)"
-        style="fill: white">
-    </ngx-charts-pie-chart>
-    <ngx-charts-pie-chart
-        [view]="view"
-        [results]="taskGROUPBYConditions"
-        [legend]="showLegend"
-        [labels]="showLabels"
-        [legendPosition]="legendPosition"
-        [doughnut]="isDoughnut"
-        [gradient]="gradient"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)"
-        style="fill: white">
-    </ngx-charts-pie-chart>
-    <ngx-charts-pie-chart
-        [view]="view"
-        [results]="taskGROUPBYThreatLevel"
-        [legend]="showLegend"
-        [labels]="showLabels"
-        [legendPosition]="legendPosition"
-        [doughnut]="isDoughnut"
-        [gradient]="gradient"
-        (select)="onSelect($event)"
-        (activate)="onActivate($event)"
-        (deactivate)="onDeactivate($event)"
-        style="fill: white">
-    </ngx-charts-pie-chart>
-</div>
+@if (taskGROUPBYConditions.length > 0) {
+    <button mat-flat-button color="primary" type="button" (click)="resetTable()" id="resetTableBTN">Reset Table</button>
+    <div class='chartContainer'>
+        <ngx-charts-pie-chart
+            [view]="view"
+            [results]="taskGROUPBYCategories"
+            [legend]="showLegend"
+            [labels]="showLabels"
+            [legendPosition]="legendPosition"
+            [doughnut]="isDoughnut"
+            [gradient]="gradient"
+            (select)="onSelect($event)"
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)"
+            style="fill: white">
+        </ngx-charts-pie-chart>
+        <ngx-charts-pie-chart
+            [view]="view"
+            [results]="taskGROUPBYConditions"
+            [legend]="showLegend"
+            [labels]="showLabels"
+            [legendPosition]="legendPosition"
+            [doughnut]="isDoughnut"
+            [gradient]="gradient"
+            (select)="onSelect($event)"
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)"
+            style="fill: white">
+        </ngx-charts-pie-chart>
+        <ngx-charts-pie-chart
+            [view]="view"
+            [results]="taskGROUPBYThreatLevel"
+            [legend]="showLegend"
+            [labels]="showLabels"
+            [legendPosition]="legendPosition"
+            [doughnut]="isDoughnut"
+            [gradient]="gradient"
+            (select)="onSelect($event)"
+            (activate)="onActivate($event)"
+            (deactivate)="onDeactivate($event)"
+            style="fill: white">
+        </ngx-charts-pie-chart>
+    </div>
+} @else {
+    <div class='chartContainer'>
+        <h3>No data avaliable to make charts. Craete a task to see your analytics</h3>
+    </div>
+}

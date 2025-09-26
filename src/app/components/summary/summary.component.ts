@@ -6,11 +6,13 @@ import { chartDataInterface } from '../../interfaces';
 import { PostgresService } from '../../services/postgres.service';
 import { forkJoin } from 'rxjs';
 import { DataService } from '../../services/data.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   standalone:true,
   selector: 'app-summary',
   imports: [
+    CommonModule,
     NgxChartsModule,
     MatButtonModule
   ],
@@ -18,12 +20,10 @@ import { DataService } from '../../services/data.service';
   styles: `
     @use '../../../styles.scss' as c;
     .chartContainer{
-      display: flex; /* Enables flexbox for the container */
-      justify-content: space-around; /* Distributes space evenly around items */
-      /* Or use: justify-content: space-between; for space between items,
-        or justify-content: flex-start; if you want them to align to the left */
-      align-items: flex-start; /* Aligns items to the start of the cross-axis (top) */
-      flex-wrap: wrap; /* Allows charts to wrap to the next line if the screen is too small */
+      display: flex; 
+      justify-content: space-around; 
+      align-items: flex-start; 
+      flex-wrap: wrap; 
     }
     ngx-charts-pie-chart {
       margin-top: 0px;
@@ -31,10 +31,13 @@ import { DataService } from '../../services/data.service';
     }
     #resetTableBTN{
       @include c.buttonColors;
-      position: absolute; /* This takes the button out of normal flow */
-      z-index: 10; /* Ensure it's on top of other content */
+      position: absolute; 
+      z-index: 10;
       top: 10px;
       left: 30px;
+    }
+    h3 {
+      color:white
     }
   `
 })
@@ -62,9 +65,9 @@ export class SummaryComponent implements OnInit {
 };
 
 
-  public taskGROUPBYCategories:chartDataInterface[];//=[{column:'TestBed',count:1},{column:'Test2',count:2},{column:'Test',count:1}];
-  public taskGROUPBYConditions:chartDataInterface[];
-  public taskGROUPBYThreatLevel:chartDataInterface[];
+  public taskGROUPBYCategories:chartDataInterface[] = [];
+  public taskGROUPBYConditions:chartDataInterface[] = [];
+  public taskGROUPBYThreatLevel:chartDataInterface[] = [];
   constructor(
     private psql:PostgresService,
     private data:DataService
