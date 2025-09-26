@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component,OnInit } from '@angular/core';
+import { Component,OnInit } from '@angular/core';
 import { Color, LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -15,7 +15,6 @@ import { DataService } from '../../services/data.service';
     MatButtonModule
   ],
   templateUrl:'summary.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     @use '../../../styles.scss' as c;
     .chartContainer{

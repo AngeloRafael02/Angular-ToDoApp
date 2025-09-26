@@ -1,10 +1,9 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MarkdownModule } from 'ngx-markdown';
 import { MiscService } from '../../services/misc.service';
 
 @Component({
   selector: 'app-about',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     MarkdownModule
   ], 
@@ -22,9 +21,8 @@ import { MiscService } from '../../services/misc.service';
     h2,p{color:white;}
     #aboutContainer{
       padding-left:30px;
-      height: 100%; /* Make it fill the tile's height */
-      overflow-y: auto; /* Enable vertical scrolling */
-      /* You might also want to add padding or other styling */
+      height: 100%;
+      overflow-y: auto;
       box-sizing: border-box;
     }
   `
