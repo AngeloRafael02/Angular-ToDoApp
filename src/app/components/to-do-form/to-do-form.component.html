@@ -50,7 +50,7 @@
                 <mat-form-field>
                     <mat-label>Status</mat-label>
                     <mat-select [(value)]="test" formControlName="stat_id">
-                        <mat-option *ngFor="let status of taskConditions" [value]="status.id">{{status.stat}}</mat-option>
+                        <mat-option *ngFor="let status of taskConditions" [value]="status.id" [disabled]="mode != 'update'">{{status.stat}}</mat-option>
                     </mat-select>
                 </mat-form-field>
             </mat-grid-tile>
