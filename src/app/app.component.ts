@@ -6,7 +6,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTabsModule } from '@angular/material/tabs';
 import { trigger, transition, style, query, group, animate } from '@angular/animations';
-import { CommonModule } from '@angular/common';
+
 import { filter, forkJoin, Subject, Subscription, takeUntil } from 'rxjs';
 
 import { ClockComponent } from './components/clock/clock.component';
@@ -22,9 +22,8 @@ import { slideTable,slideTo } from './app.animations';
 @Component({
   selector: 'app-root',
   imports: [
-    CommonModule,
     RouterModule,
-    MatButtonModule, 
+    MatButtonModule,
     MatButtonToggleModule,
     MatTabsModule,
     ToDoListComponent,
@@ -32,7 +31,7 @@ import { slideTable,slideTo } from './app.animations';
     MatGridListModule,
     ToDoFinishedComponent,
     ToDoCancelledComponent
-  ],
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
   animations:[   

@@ -2,7 +2,7 @@
 
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CommonModule } from '@angular/common';
+
 import { MatButtonModule } from '@angular/material/button'; 
 
 export interface AlertDialogData {
@@ -13,9 +13,8 @@ export interface AlertDialogData {
 @Component({
   selector: 'app-alert-modal',
   imports: [
-    CommonModule,
     MatButtonModule
-  ],
+],
   template: `
   <div id="alertBox">
     <h2 mat-dialog-title>Alert</h2>
@@ -23,16 +22,15 @@ export interface AlertDialogData {
       <p>{{ data.message }}</p>
     </div>
     <div mat-dialog-actions align="right">
-      <ng-container *ngIf="data.showYesNoButtons; else okButton">
+      @if (data.showYesNoButtons) {
         <button mat-button (click)="onNoClick()" class="modalBTN">No</button>
         <button mat-button cdkFocusInitial (click)="onYesClick()" class="modalBTN">Yes</button>
-      </ng-container>
-      <ng-template #okButton>
+      } @else {
         <button mat-button cdkFocusInitial (click)="onOkClick()" class="modalBTN">OK</button>
-      </ng-template>
+      }
     </div>
   </div>
-
+  
   `,
   styles: `
     @use '../../../styles.scss' as c ;

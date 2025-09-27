@@ -6,16 +6,15 @@ import { chartDataInterface } from '../../interfaces';
 import { PostgresService } from '../../services/postgres.service';
 import { forkJoin } from 'rxjs';
 import { DataService } from '../../services/data.service';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   standalone:true,
   selector: 'app-summary',
   imports: [
-    CommonModule,
     NgxChartsModule,
     MatButtonModule
-  ],
+],
   templateUrl:'summary.component.html',
   styles: `
     @use '../../../styles.scss' as c;

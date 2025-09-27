@@ -1,15 +1,15 @@
 <div class="topArea">
-<mat-grid-list cols="12" rowHeight="75px">
-  <mat-grid-tile colspan="3"> 
-    <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="appNav" value="{{currentUrl}}">
-      <mat-button-toggle routerLink="about" class="buttonBase" value="about" mat-flat-button >About App</mat-button-toggle>
-      <mat-button-toggle routerLink="summary" class="buttonBase" value="summary" mat-flat-button >Task Summary</mat-button-toggle>
-    </mat-button-toggle-group>
-  </mat-grid-tile>
-  <mat-grid-tile colspan="9">
-    <app-clock></app-clock>
-  </mat-grid-tile>
-</mat-grid-list>
+  <mat-grid-list cols="12" rowHeight="75px">
+    <mat-grid-tile colspan="3">
+      <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="appNav" value="{{currentUrl}}">
+        <mat-button-toggle routerLink="about" class="buttonBase" value="about" mat-flat-button >About App</mat-button-toggle>
+        <mat-button-toggle routerLink="summary" class="buttonBase" value="summary" mat-flat-button >Task Summary</mat-button-toggle>
+      </mat-button-toggle-group>
+    </mat-grid-tile>
+    <mat-grid-tile colspan="9">
+      <app-clock></app-clock>
+    </mat-grid-tile>
+  </mat-grid-list>
 </div>
 
 <mat-grid-list cols="12" rowHeight="200px" [@routeAnimations]="prepareRoute(outlet)">
@@ -18,25 +18,28 @@
 
 
 @defer (on viewport) {
-  <div [@slideAnimation]="activeTable" id="list">
-    <app-to-do-list 
-      *ngIf="activeTable === 'Main'"
-      [taskCategories]="taskCategories" 
-      [taskConditions]="taskConditions" 
+<div [@slideAnimation]="activeTable" id="list">
+  @if (activeTable === 'Main') {
+    <app-to-do-list
+      [taskCategories]="taskCategories"
+      [taskConditions]="taskConditions"
       [taskThreatLevels]="taskThreatLevels"
       [nUserID]="nUserID">
     </app-to-do-list>
-    <app-to-do-finished 
-      *ngIf="activeTable === 'Finished'"
+  }
+  @if (activeTable === 'Finished') {
+    <app-to-do-finished
       [nUserID]="nUserID">
     </app-to-do-finished>
-    <app-to-do-cancelled 
-      *ngIf="activeTable === 'Cancelled'" 
+  }
+  @if (activeTable === 'Cancelled') {
+    <app-to-do-cancelled
       [nUserID]="nUserID">
-    </app-to-do-cancelled> 
-  </div>
+    </app-to-do-cancelled>
+  }
+</div>
 } @placeholder {
-  <p>Charts Are Loading</p>
+<p>Charts Are Loading</p>
 } @error {
-  <p>Failed to Load Chart...</p>
+<p>Failed to Load Chart...</p>
 }

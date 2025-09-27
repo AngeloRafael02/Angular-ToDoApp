@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component,Inject,OnInit } from '@angular/core'
 import { PostgresService } from '../../services/postgres.service';
 import { categoriesInterface, conditionInterface, dialogDataInterface, taskInterface, threatInterface } from '../../interfaces';
 import { ReactiveFormsModule, FormBuilder,Validators, FormGroup, FormControl} from "@angular/forms";
-import { CommonModule } from '@angular/common';
+
 import {provideNativeDateAdapter} from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
@@ -19,14 +19,13 @@ import { MatGridListModule } from '@angular/material/grid-list';
     MatDialogContent,
     MatDialogActions,
     MatButtonModule,
-    MatFormFieldModule, 
-    MatInputModule, 
+    MatFormFieldModule,
+    MatInputModule,
     MatSelectModule,
     MatDatepickerModule,
     MatGridListModule,
-    ReactiveFormsModule, 
-    CommonModule,
-  ],
+    ReactiveFormsModule
+],
   templateUrl:'to-do-form.component.html',
   styles:`
     @use '../../../styles.scss' as c ;
