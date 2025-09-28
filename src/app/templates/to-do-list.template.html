@@ -108,8 +108,9 @@
 
       <tr mat-header-row *matHeaderRowDef="taskColumns; sticky: true "></tr>
       <tr mat-row *matRowDef="let row; columns: taskColumns;" [ngClass]="evaluateDate(row)"></tr>
+      
       <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="8">No data Found</td>
+        <td class="mat-cell" [attr.colSpan]="taskColumns.length">No data found.</td>
       </tr>
     </table>
 

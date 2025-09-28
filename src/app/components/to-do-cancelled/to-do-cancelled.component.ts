@@ -1,10 +1,5 @@
 import { Component, OnDestroy, OnInit,OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { ToDoListComponent } from '../to-do-list/to-do-list.component';
-import { MatDialog } from '@angular/material/dialog';
-import { LoadingService } from '../../services/loading.service';
-import { PostgresService } from '../../services/postgres.service';
-import { MiscService } from '../../services/misc.service';
-import { DataService } from '../../services/data.service';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { taskViewInterface } from '../../interfaces';
 import { CommonModule } from '@angular/common';
@@ -34,18 +29,6 @@ import { MatInputModule } from '@angular/material/input';
 export class ToDoCancelledComponent extends ToDoListComponent implements OnInit,OnChanges,OnDestroy {
   override tableID:string='cancelled';
 
-  constructor(
-    override matDialog:MatDialog,
-    override loadingService:LoadingService,
-    override psql:PostgresService,
-    override misc:MiscService,
-    override data:DataService
-  ){
-    super(matDialog,loadingService,psql,misc,data)
-    this.psql.getColumnHeaders('task_view').subscribe(data => {
-      this.taskColumns = data;
-    });
-  }
 
   override ngOnInit(): void {
     this.psql.getAllCancelledTaskByID(this.nUserID).subscribe(data => {
@@ -68,8 +51,5 @@ export class ToDoCancelledComponent extends ToDoListComponent implements OnInit,
     }
   }
 
-  public override updateTask(task: number): void {}
-  public override finishTask(task: number): void {}
-  public override deleteTask(task: number): void {}
 }
 

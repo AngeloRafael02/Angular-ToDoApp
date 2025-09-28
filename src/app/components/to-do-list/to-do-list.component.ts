@@ -1,4 +1,4 @@
-import {  Component, Input, OnDestroy, OnInit,OnChanges, ViewChild, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
+import {  Component, ChangeDetectorRef, Input, OnDestroy, OnInit,OnChanges, ViewChild, SimpleChanges, ChangeDetectionStrategy, AfterViewChecked } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSort, MatSortModule} from '@angular/material/sort';
 import { MatFormField, MatLabel  } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { CdkColumnDef } from '@angular/cdk/table';
 
 import { ToDoFormComponent } from '../to-do-form/to-do-form.component';
 import { PostgresService } from '../../services/postgres.service';
@@ -19,6 +20,9 @@ import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-to-do-list',
+  providers:[
+    CdkColumnDef
+  ],
   imports: [
     CommonModule,
     MatTableModule,
@@ -29,22 +33,24 @@ import { DataService } from '../../services/data.service';
     MatLabel,
     MatInputModule,
   ],
-  templateUrl:'to-do-list.component.html',
+  templateUrl:'../../templates/to-do-list.template.html',
   styleUrls:['to-do-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class ToDoListComponent implements OnInit,OnChanges,OnDestroy{
+export class ToDoListComponent implements OnInit,OnChanges,OnDestroy, AfterViewChecked{
 
   constructor(
     public matDialog:MatDialog,
     public loadingService:LoadingService,
     public psql:PostgresService,
     public misc:MiscService,
-    public data:DataService
+    public data:DataService,
+    private cdr:ChangeDetectorRef
   ){
     this.psql.getColumnHeaders('task_view').subscribe(data => {
       this.taskColumns = data;
       this.taskColumns = this.misc.insertArrayAtIndex(this.taskColumns,["Options"],10)
+      this.cdr.markForCheck(); 
     });
   }
 
@@ -61,6 +67,10 @@ export class ToDoListComponent implements OnInit,OnChanges,OnDestroy{
   public dataSource:MatTableDataSource<taskViewInterface> = new MatTableDataSource(this.tasks);
   public receivedData: string;
   public dataSubscription: Subscription;
+
+  // Private flags to track if the sort/paginator have been assigned to the current dataSource
+  private sortAssigned = false;
+  private paginatorAssigned = false; 
 
   @ViewChild(MatSort) public sort: MatSort;
   @ViewChild(MatPaginator) public paginator: MatPaginator;
@@ -80,9 +90,9 @@ export class ToDoListComponent implements OnInit,OnChanges,OnDestroy{
     if (changes['nUserID']){
       this.psql.getAllTaskByID(this.nUserID).subscribe(data => {
         this.dataSource = new MatTableDataSource<taskViewInterface>(data);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
         this.tasksCount = data.length;
+        this.sortAssigned = false;
+        this.paginatorAssigned = false;
       });
       this.dataSubscription = this.data.data$.subscribe((data) => {
         this.receivedData = data;
@@ -90,6 +100,18 @@ export class ToDoListComponent implements OnInit,OnChanges,OnDestroy{
           this.chartFilter(data);
         }
       });
+    }
+  }
+
+  ngAfterViewChecked(): void {
+    if (this.sort && !this.sortAssigned) {
+      this.dataSource.sort = this.sort;
+      this.sortAssigned = true;
+    }
+
+    if (this.paginator && !this.paginatorAssigned) {
+      this.dataSource.paginator = this.paginator;
+      this.paginatorAssigned = true;
     }
   }
 
