@@ -1,26 +1,3 @@
-export interface dialogDataInterface{
-    allCat:categoriesInterface[]
-    allCond:conditionInterface[],
-    allThr:threatInterface[],
-    option:string,
-    ID:number
-}
-export interface conditionInterface {
-    id:number
-    stat:string
-}
-export interface categoriesInterface {
-    id:number
-    cat:string
-}
-export interface threatInterface {
-    id:number
-    level:string
-}
-export interface chartDataInterface{
-    name:string
-    value:number
-}
 export interface taskInterface {
     id?:number
     title:string
@@ -34,6 +11,7 @@ export interface taskInterface {
     deadline?:Date | string
     owner_id:number
 }
+
 export interface taskViewInterface{
     ID:number
     Title:string
@@ -49,6 +27,4 @@ export interface taskViewInterface{
     TID:number
     UID:number
     CID:number
-}
-export interface userInterface {
 }

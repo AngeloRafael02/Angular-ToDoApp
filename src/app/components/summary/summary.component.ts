@@ -2,7 +2,7 @@ import { Component,OnInit } from '@angular/core';
 import { Color, LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { MatButtonModule } from '@angular/material/button';
 
-import { chartDataInterface } from '../../interfaces';
+import { chartDataInterface } from '../../interfaces/misc.interface';
 import { PostgresService } from '../../services/postgres.service';
 import { forkJoin } from 'rxjs';
 import { DataService } from '../../services/data.service';

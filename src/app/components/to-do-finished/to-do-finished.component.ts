@@ -7,7 +7,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ToDoListComponent } from '../to-do-list/to-do-list.component';
-import { taskViewInterface } from '../../interfaces';
+import { taskViewInterface } from '../../interfaces/task.interface';
 
 
 @Component({

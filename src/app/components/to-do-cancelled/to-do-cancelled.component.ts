@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit,OnChanges, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { ToDoListComponent } from '../to-do-list/to-do-list.component';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { taskViewInterface } from '../../interfaces';
+import { taskViewInterface } from '../../interfaces/task.interface';
 import { CommonModule } from '@angular/common';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';

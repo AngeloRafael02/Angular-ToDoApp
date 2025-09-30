@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component,Inject,OnInit } from '@angular/core';
 import { PostgresService } from '../../services/postgres.service';
-import { categoriesInterface, conditionInterface, dialogDataInterface, taskInterface, threatInterface } from '../../interfaces';
+import { categoriesInterface,conditionInterface,dialogDataInterface,threatInterface } from '../../interfaces/forms.interface';
+import { taskInterface } from '../../interfaces/task.interface';
 import { ReactiveFormsModule, FormBuilder,Validators, FormGroup, FormControl} from "@angular/forms";
 
 import {provideNativeDateAdapter} from '@angular/material/core';

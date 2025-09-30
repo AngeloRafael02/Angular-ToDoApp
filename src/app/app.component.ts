@@ -12,7 +12,7 @@ import { filter, forkJoin, Subject, Subscription, takeUntil } from 'rxjs';
 import { ClockComponent } from './components/clock/clock.component';
 import { ToDoFormComponent } from './components/to-do-form/to-do-form.component';
 import { ToDoListComponent } from './components/to-do-list/to-do-list.component';
-import { categoriesInterface, conditionInterface, dialogDataInterface, threatInterface } from './interfaces';
+import { categoriesInterface,conditionInterface,dialogDataInterface,threatInterface } from './interfaces/forms.interface'; 
 import { PostgresService } from './services/postgres.service';
 import { ToDoFinishedComponent } from './components/to-do-finished/to-do-finished.component';
 import { ToDoCancelledComponent } from './components/to-do-cancelled/to-do-cancelled.component';
@@ -41,10 +41,10 @@ import { slideTable,slideTo } from './app.animations';
     ]),
     trigger('slideAnimation', [
       transition('Main => Finished', slideTable('right')),
-      transition('Finished => Main', slideTable('left')),
+      transition('Finished => Main', slideTable('right')),
       transition('Main => Cancelled', slideTable('right')),
-      transition('Cancelled => Main', slideTable('left')),
-      transition('Finished => Cancelled', slideTable('left')),
+      transition('Cancelled => Main', slideTable('right')),
+      transition('Finished => Cancelled', slideTable('right')),
       transition('Cancelled => Finished', slideTable('right')),
     ])
   ]

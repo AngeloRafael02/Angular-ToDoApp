@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
-import { categoriesInterface, chartDataInterface, conditionInterface, taskInterface, taskViewInterface, threatInterface } from '../interfaces';
+import { taskInterface,taskViewInterface } from '../interfaces/task.interface';
+import { categoriesInterface,conditionInterface,threatInterface } from '../interfaces/forms.interface';
+import { chartDataInterface } from '../interfaces/misc.interface';
 
 @Injectable({
   providedIn: 'root'
