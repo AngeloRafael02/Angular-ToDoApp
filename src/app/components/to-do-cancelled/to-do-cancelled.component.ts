@@ -23,7 +23,10 @@ import { MatInputModule } from '@angular/material/input';
     MatFormField
   ],
   templateUrl: '../../templates/to-do-list.template.html',
-  styleUrls: ['../../styles/to-do-list.styles.scss'],
+  styleUrls:[
+    '../../styles/to-do-list.styles.scss',
+    '../../styles/table-colors.scss'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ToDoCancelledComponent extends ToDoListComponent implements OnInit,OnChanges,OnDestroy {

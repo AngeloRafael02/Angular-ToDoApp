@@ -13,10 +13,10 @@ import { ClockComponent } from './components/clock/clock.component';
 import { ToDoFormComponent } from './components/to-do-form/to-do-form.component';
 import { ToDoListComponent } from './components/to-do-list/to-do-list.component';
 import { categoriesInterface,conditionInterface,dialogDataInterface,threatInterface } from './interfaces/forms.interface'; 
-import { PostgresService } from './services/postgres.service';
+import { PostgresService } from './services/postgres/postgres.service';
 import { ToDoFinishedComponent } from './components/to-do-finished/to-do-finished.component';
 import { ToDoCancelledComponent } from './components/to-do-cancelled/to-do-cancelled.component';
-import { DataService } from './services/data.service';
+import { DataService } from './services/data/data.service';
 import { slideTable,slideTo } from './app.animations';
 
 @Component({

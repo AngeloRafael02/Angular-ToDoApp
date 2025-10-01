@@ -1,6 +1,6 @@
 import { Component,ContentChild,Input,OnInit, TemplateRef } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { LoadingService } from '../../services/loading.service';
+import { LoadingService } from '../../services/loading/loading.service';
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
 import { Observable, tap } from 'rxjs';
 import { RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';

@@ -10,14 +10,14 @@ import { MatInputModule } from '@angular/material/input';
 import { CdkColumnDef } from '@angular/cdk/table';
 
 import { ToDoFormComponent } from '../to-do-form/to-do-form.component';
-import { PostgresService } from '../../services/postgres.service';
-import { MiscService } from '../../services/misc.service';
+import { PostgresService } from '../../services/postgres/postgres.service';
+import { MiscService } from '../../services/misc/misc.service';
 import { categoriesInterface,conditionInterface,dialogDataInterface,threatInterface } from '../../interfaces/forms.interface';
 import { taskViewInterface } from '../../interfaces/task.interface';
-import { LoadingService } from '../../services/loading.service';
+import { LoadingService } from '../../services/loading/loading.service';
 import { AlertDialogData, AlertModalComponent } from '../alert-modal/alert-modal.component';
 import { Subscription } from 'rxjs';
-import { DataService } from '../../services/data.service';
+import { DataService } from '../../services/data/data.service';
 
 @Component({
   selector: 'app-to-do-list',

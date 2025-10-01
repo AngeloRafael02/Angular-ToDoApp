@@ -3,9 +3,9 @@ import { Color, LegendPosition, NgxChartsModule, ScaleType } from '@swimlane/ngx
 import { MatButtonModule } from '@angular/material/button';
 
 import { chartDataInterface } from '../../interfaces/misc.interface';
-import { PostgresService } from '../../services/postgres.service';
+import { PostgresService } from '../../services/postgres/postgres.service';
 import { forkJoin } from 'rxjs';
-import { DataService } from '../../services/data.service';
+import { DataService } from '../../services/data/data.service';
 
 
 @Component({

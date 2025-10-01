@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MarkdownModule } from 'ngx-markdown';
-import { MiscService } from '../../services/misc.service';
+import { MiscService } from '../../services/misc/misc.service';
 
 @Component({
   selector: 'app-about',
