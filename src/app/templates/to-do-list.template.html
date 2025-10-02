@@ -3,25 +3,33 @@
     <mat-label>Filter</mat-label>
     <input matInput (keyup)="applySearchFilter($event)" placeholder="Ex. ium" #input>
   </mat-form-field>
+  @if (tableID == 'tasks'){
+    <button mat-flat-button color="primary" type="button" (click)="newTaskModal()" id="newTaskBTN">New Task</button>
+  }
   <table mat-table [dataSource]="dataSource" matSort matSortActive="Deadline" matSortDirection="desc" class="mat-table mat-elevation-z8" [id]="tableID">
+
+    <caption style="caption-side: top;">
+      <h2>{{ misc.capitalizeFirstLetter(this.tableID) }} Table</h2>
+      <p>
+        A list of all  {{this.tableID == 'tasks' ? 'active and pending' : this.tableID}}   tasks.
+      </p>
+    </caption>
+
       <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
 
-      <!-- Position Column -->
       <ng-container matColumnDef="ID">
         <th mat-header-cell *matHeaderCellDef> ID </th>
         <td mat-cell *matCellDef="let element"> {{element.ID}} </td>
         <td mat-footer-cell *matFooterCellDef class="footerRow"> ID </td>
       </ng-container>
 
-      <!-- Name Column -->
       <ng-container matColumnDef="Title">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Title </th>
         <td mat-cell *matCellDef="let element"> {{element.Title}} </td>
         <td mat-footer-cell *matFooterCellDef class="footerRow"> Title </td>
       </ng-container>
 
-      <!-- Weight Column -->
       <ng-container matColumnDef="Description">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Description </th>
         <td mat-cell *matCellDef="let element"> {{element.Description}} </td>
@@ -34,21 +42,18 @@
         <td mat-footer-cell *matFooterCellDef class="footerRow"> Category </td>
       </ng-container>
 
-      <!-- Symbol Column -->
       <ng-container matColumnDef="Priority">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Priority </th>
         <td mat-cell *matCellDef="let element"> {{element.Priority}} </td>
         <td mat-footer-cell *matFooterCellDef class="footerRow"> Priority </td>
       </ng-container>
 
-      <!-- Symbol Column -->
       <ng-container matColumnDef="Threat Level">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Threat Level </th>
         <td mat-cell *matCellDef="let element" [ngClass]="getThreatLevelCellClass(element['Threat Level'])"> {{element['Threat Level']}} </td>
         <td mat-footer-cell *matFooterCellDef class="footerRow"> Threat Level </td>
       </ng-container>
 
-            <!-- Symbol Column -->
       <ng-container matColumnDef="Status">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
         <td mat-cell *matCellDef="let element" [ngClass]="getStatusColorClass(element.Status)">{{element.Status}} </td>
@@ -60,6 +65,7 @@
         <td mat-cell *matCellDef="let element"> {{deadlineFormatHelper(element.Deadline)}} </td>
         <td mat-footer-cell *matFooterCellDef class="footerRow"> Deadline </td>
       </ng-container>
+
       <ng-container matColumnDef="Created At">
         <th mat-header-cell *matHeaderCellDef mat-sort-header> Created At </th>
         <td mat-cell *matCellDef="let element"> {{deadlineFormatHelper(element['Created At'])}} </td>
@@ -82,6 +88,7 @@
         <td mat-footer-cell *matFooterCellDef class="footerRow"> Options </td>
       </ng-container>
 
+      <!--Columns Below are hidden but needed-->
       <ng-container matColumnDef="SID">
         <th mat-header-cell *matHeaderCellDef> SID </th>
         <td mat-cell *matCellDef="let element"> {{element.SID}} </td>
@@ -108,7 +115,7 @@
 
       <tr mat-header-row *matHeaderRowDef="taskColumns; sticky: true "></tr>
       <tr mat-row *matRowDef="let row; columns: taskColumns;" [ngClass]="evaluateDate(row)"></tr>
-      
+
       <tr class="mat-row" *matNoDataRow>
         <td class="mat-cell" [attr.colSpan]="taskColumns.length">No data found.</td>
       </tr>
