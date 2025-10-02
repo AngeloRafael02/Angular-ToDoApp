@@ -34,10 +34,11 @@ FrontEnd
     - add annimations for transition of them
 > Style the To Do Form - DONE
 > Organize styles.scss
-> align table Headers to center
 > Organize services file into their own folders - DONE
 > Organize interfaces file into their own folders - DONE
 > @angular/animation (app.animations.ts) depreciated, refactor code
+> Consider replacing some RxJS with Signals
+> Attempt to add SSR to Project
 ERRORS:
     - Category, Status, and Threat Values on Update do not appear - FIXED
     - Loading Modules do not work
