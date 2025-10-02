@@ -36,7 +36,7 @@ import { DataService } from '../../services/data/data.service';
       left: 30px;
     }
     h3 {
-      color:white
+      color:c.$mainTextColor;
     }
   `
 })

@@ -35,7 +35,10 @@ import { DataService } from '../../services/data/data.service';
     MatInputModule,
   ],
   templateUrl:'../../templates/to-do-list.template.html',
-  styleUrls:['to-do-list.component.scss'],
+  styleUrls:[
+    './to-do-list.component.scss',
+    '../../styles/table-colors.scss'
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToDoListComponent implements OnInit,OnChanges,OnDestroy, AfterViewChecked{

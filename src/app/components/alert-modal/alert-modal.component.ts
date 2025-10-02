@@ -34,8 +34,10 @@ export interface AlertDialogData {
   `,
   styles: `
     @use '../../../styles.scss' as c ;
-    #alertBox { width:auto;padding: 15px 20px 15px 20px; }
-    .modalBTN{ 
+    #alertBox { 
+      width:auto;padding: 15px 20px 15px 20px; 
+    }
+    .modalBTN { 
       @include c.buttonColors;
       margin-left:1%; 
       margin-bottom:1%; 

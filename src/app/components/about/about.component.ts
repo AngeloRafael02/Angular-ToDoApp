@@ -8,21 +8,20 @@ import { MiscService } from '../../services/misc/misc.service';
     MarkdownModule
   ], 
   template: `
-  <div id="aboutContainer" style="overflow-y:scroll;">
-  <p>
-  <markdown  class="variable-binding" [data]="FileContent"></markdown>
-
-  </p>     
-  </div>
-
-
+    <div id="aboutContainer" style="overflow-y:scroll;">
+      <p>
+        <markdown  class="variable-binding" [data]="FileContent"></markdown>
+      </p>     
+    </div>
   `,
   styles: `
-    h2,p{color:white;}
-    #aboutContainer{
+    @use '../../../styles.scss' as c;
+    h2, p{ 
+      color:c.$mainTextColor;
+    }
+    #aboutContainer {
       padding-left:30px;
       height: 100%;
-      overflow-y: auto;
       box-sizing: border-box;
     }
   `

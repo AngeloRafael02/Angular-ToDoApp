@@ -10,7 +10,11 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
   </div>
   `,
   styles: `
-    h3{text-align:center; padding:20px 0px 20px 0px; color:white;}
+    h3{
+      text-align:center; 
+      padding:20px 0px 20px 0px; 
+      color:c.$mainTextColor;
+    }
   `
 })
 export class ClockComponent implements OnInit, OnDestroy  {

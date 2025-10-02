@@ -15,6 +15,9 @@ mat-paginator{
 
 table,th,td   {
     border: 1px solid black;
+    caption {
+      color:c.$mainTextColor;
+    }
     th,td {
       text-align: center;
       &:first-child,
@@ -45,16 +48,4 @@ table,th,td   {
 .tableContainer{
   margin-top: 20px;
 }
-
-.greenCell,.greenRow { background-color: lightgreen; }
-.orangeCell,.orangeRow { background-color: orange; }
-.redCell,.redRow { background-color: lightcoral;  }
-.greyCell{ background-color:dimgray; color:white; }
-.yellowCell{ background-color:yellow; }
-.aquaCell{ background-color:aqua;}
-.lightblueCell{ background-color:lightblue;}
-.coralCell{ background-color:coral;}
-.bluevioletCell{ background-color:blueviolet;}
-.whiteCell,.whiteRow{ background-color:white;}
-.blackCell,.blackRow { background-color: darkgray;}
 

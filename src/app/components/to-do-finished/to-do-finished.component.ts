@@ -23,7 +23,10 @@ import { taskViewInterface } from '../../interfaces/task.interface';
     MatInputModule,
   ],
   templateUrl: '../../templates/to-do-list.template.html',
-  styleUrls: ['../../styles/to-do-list.styles.scss'],
+  styleUrls:[
+    '../../styles/to-do-list.styles.scss',
+    '../../styles/table-colors.scss'
+  ],
   changeDetection:ChangeDetectionStrategy.OnPush
 })
 export class ToDoFinishedComponent extends ToDoListComponent implements OnInit,OnChanges,OnDestroy {

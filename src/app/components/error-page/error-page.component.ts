@@ -5,7 +5,7 @@ import { Component } from '@angular/core';
   imports: [],
   template: `
     <p>
-      error-page works!
+      ERROR: Sometinhg is Wrong with the Website
     </p>
   `,
   styles: ``

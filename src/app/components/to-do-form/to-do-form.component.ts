@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component,Inject,OnInit } from '@angular/core';
-import { PostgresService } from '../../services/postgres.service';
+import { PostgresService } from '../../services/postgres/postgres.service';
 import { categoriesInterface,conditionInterface,dialogDataInterface,threatInterface } from '../../interfaces/forms.interface';
 import { taskInterface } from '../../interfaces/task.interface';
 import { ReactiveFormsModule, FormBuilder,Validators, FormGroup, FormControl} from "@angular/forms";
@@ -30,9 +30,17 @@ import { MatGridListModule } from '@angular/material/grid-list';
   templateUrl:'to-do-form.component.html',
   styles:`
     @use '../../../styles.scss' as c ;
-    h2{margin-left:30px;}
-    #note{ resize:none; }
-    #formBox{ width:500px; padding:1%;background-color:c.$color4}
+    h2{
+      margin-left:30px;
+    }
+    #note{ 
+      resize:none; 
+    }
+    #formBox{ 
+      width:500px; 
+      padding:1%;
+      background-color:c.$color4
+    }
     .modalBTN{ 
       @include c.buttonColors;
       margin-left:1%; 

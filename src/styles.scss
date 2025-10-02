@@ -2,13 +2,15 @@
 @use '@angular/material' as mat;
 @include mat.core();
 
+$mainTextColor:#FFFFFF;
+
 $color1:#404258;
 $color2:#344955;
 $color3:#50727B;
 $color4:#78A083;
 
 @mixin buttonColors {
-    color: white;
+    color: $mainTextColor;
     background-color: $color3;
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
